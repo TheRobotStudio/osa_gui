@@ -1,0 +1,9 @@
+{
+    "brand": "The Robot Studio2",
+    "dof": 74,
+    "lpSlaveBoardArray": [
+    ],
+    "name": "MasterBoard",
+    "partNumber": 2,
+    "version": "1.0.4"
+}

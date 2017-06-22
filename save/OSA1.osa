@@ -1,0 +1,18 @@
+{
+    "brand": "The Robot Studio",
+    "dof": 78,
+    "modelPath": "",
+    "name": "OSA",
+    "pActuator": [
+    ],
+    "pBattery": [
+    ],
+    "pCommunicationLayer": [
+    ],
+    "pComputer": [
+    ],
+    "pSensor": [
+    ],
+    "partNumber": 0,
+    "version": ""
+}

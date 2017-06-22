@@ -1,0 +1,426 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>SequencerGUIClass</class>
+ <widget class="QWidget" name="SequencerGUIClass">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>800</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Robot Sequencer</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="../resources/images.qrc">
+    <normaloff>:/images/record.png</normaloff>:/images/record.png</iconset>
+  </property>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>50</y>
+     <width>131</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Postures</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_2">
+   <property name="geometry">
+    <rect>
+     <x>440</x>
+     <y>50</y>
+     <width>68</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Sequence</string>
+   </property>
+  </widget>
+  <widget class="QTableWidget" name="tw_sequence">
+   <property name="geometry">
+    <rect>
+     <x>440</x>
+     <y>80</y>
+     <width>311</width>
+     <height>331</height>
+    </rect>
+   </property>
+   <property name="autoScrollMargin">
+    <number>16</number>
+   </property>
+   <attribute name="horizontalHeaderDefaultSectionSize">
+    <number>100</number>
+   </attribute>
+   <attribute name="horizontalHeaderHighlightSections">
+    <bool>true</bool>
+   </attribute>
+   <attribute name="verticalHeaderMinimumSectionSize">
+    <number>21</number>
+   </attribute>
+   <column>
+    <property name="text">
+     <string>Command</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Value</string>
+    </property>
+   </column>
+  </widget>
+  <widget class="QPushButton" name="pb_add">
+   <property name="geometry">
+    <rect>
+     <x>380</x>
+     <y>110</y>
+     <width>32</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="icon">
+    <iconset resource="../resources/images.qrc">
+     <normaloff>:/images/Arrow-Right.png</normaloff>:/images/Arrow-Right.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>32</width>
+     <height>32</height>
+    </size>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pb_remove">
+   <property name="geometry">
+    <rect>
+     <x>380</x>
+     <y>150</y>
+     <width>32</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="icon">
+    <iconset resource="../resources/images.qrc">
+     <normaloff>:/images/Arrow-Left.png</normaloff>:/images/Arrow-Left.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>32</width>
+     <height>32</height>
+    </size>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pb_record">
+   <property name="geometry">
+    <rect>
+     <x>80</x>
+     <y>420</y>
+     <width>32</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="icon">
+    <iconset resource="../resources/images.qrc">
+     <normaloff>:/images/record3.png</normaloff>:/images/record3.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>32</width>
+     <height>32</height>
+    </size>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pb_playSequence">
+   <property name="geometry">
+    <rect>
+     <x>480</x>
+     <y>420</y>
+     <width>32</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="icon">
+    <iconset resource="../resources/images.qrc">
+     <normaloff>:/images/play.png</normaloff>:/images/play.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>32</width>
+     <height>32</height>
+    </size>
+   </property>
+  </widget>
+  <widget class="QListWidget" name="lw_postures">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>80</y>
+     <width>331</width>
+     <height>331</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_3">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>430</y>
+     <width>51</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Record</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_4">
+   <property name="geometry">
+    <rect>
+     <x>440</x>
+     <y>430</y>
+     <width>41</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Play</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pb_pause">
+   <property name="geometry">
+    <rect>
+     <x>380</x>
+     <y>300</y>
+     <width>32</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="icon">
+    <iconset resource="../resources/images.qrc">
+     <normaloff>:/images/schedule.png</normaloff>:/images/schedule.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>32</width>
+     <height>32</height>
+    </size>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pb_motionStyle">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>380</x>
+     <y>370</y>
+     <width>32</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="icon">
+    <iconset resource="../resources/images.qrc">
+     <normaloff>:/images/settings2.png</normaloff>:/images/settings2.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>32</width>
+     <height>32</height>
+    </size>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="ch_enablePublish">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>480</y>
+     <width>121</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Enable state</string>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_5">
+   <property name="geometry">
+    <rect>
+     <x>130</x>
+     <y>430</y>
+     <width>41</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Play</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pb_playPosture">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>170</x>
+     <y>420</y>
+     <width>32</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="icon">
+    <iconset resource="../resources/images.qrc">
+     <normaloff>:/images/play.png</normaloff>:/images/play.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>32</width>
+     <height>32</height>
+    </size>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pb_up">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>380</x>
+     <y>190</y>
+     <width>32</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="icon">
+    <iconset resource="../resources/images.qrc">
+     <normaloff>:/images/Arrow-Up.png</normaloff>:/images/Arrow-Up.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>32</width>
+     <height>32</height>
+    </size>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pb_down">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>380</x>
+     <y>230</y>
+     <width>32</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="icon">
+    <iconset resource="../resources/images.qrc">
+     <normaloff>:/images/Arrow-Down.png</normaloff>:/images/Arrow-Down.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>32</width>
+     <height>32</height>
+    </size>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_6">
+   <property name="geometry">
+    <rect>
+     <x>380</x>
+     <y>280</y>
+     <width>41</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Pause</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_7">
+   <property name="geometry">
+    <rect>
+     <x>380</x>
+     <y>350</y>
+     <width>51</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Param</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_8">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>530</y>
+     <width>401</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Face detection : (enable when head coords are received)</string>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="ch_enableFaceTracking">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>550</y>
+     <width>171</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>face tracking</string>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
+  </widget>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources>
+  <include location="../resources/images.qrc"/>
+ </resources>
+ <connections/>
+</ui>

@@ -1,0 +1,737 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>BasicControlGUIClass</class>
+ <widget class="QWidget" name="BasicControlGUIClass">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1900</width>
+    <height>900</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Robot Basic Control</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="../resources/images.qrc">
+    <normaloff>:/images/gamepad.png</normaloff>:/images/gamepad.png</iconset>
+  </property>
+  <widget class="QStatusBar" name="statusbar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>3</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QTabWidget" name="tab_sb">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>90</y>
+     <width>1891</width>
+     <height>751</height>
+    </rect>
+   </property>
+   <property name="currentIndex">
+    <number>0</number>
+   </property>
+   <widget class="QWidget" name="tab_sb_1">
+    <attribute name="title">
+     <string>SlaveBoard 1</string>
+    </attribute>
+    <layout class="QVBoxLayout" name="verticalLayout_7"/>
+   </widget>
+   <widget class="QWidget" name="tab_sb_2">
+    <attribute name="title">
+     <string>SlaveBoard 2</string>
+    </attribute>
+   </widget>
+   <widget class="QWidget" name="tab_sb_3">
+    <attribute name="title">
+     <string>SlaveBoard 3</string>
+    </attribute>
+   </widget>
+   <widget class="QWidget" name="tab_sb_4">
+    <attribute name="title">
+     <string>SlaveBoard 4</string>
+    </attribute>
+   </widget>
+   <widget class="QWidget" name="tab_sb_5">
+    <attribute name="title">
+     <string>SlaveBoard 5</string>
+    </attribute>
+   </widget>
+   <widget class="QWidget" name="tab_sb_6">
+    <attribute name="title">
+     <string>SlaveBoard 6</string>
+    </attribute>
+   </widget>
+  </widget>
+  <widget class="QGroupBox" name="groupBox_2">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>30</y>
+     <width>1861</width>
+     <height>50</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>16777215</width>
+     <height>50</height>
+    </size>
+   </property>
+   <property name="title">
+    <string>Robot</string>
+   </property>
+   <widget class="QSpinBox" name="sb_velocity_0">
+    <property name="geometry">
+     <rect>
+      <x>1230</x>
+      <y>20</y>
+      <width>81</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="minimum">
+     <number>1</number>
+    </property>
+    <property name="maximum">
+     <number>100000</number>
+    </property>
+    <property name="value">
+     <number>850</number>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="sb_minpos_0">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>710</x>
+      <y>20</y>
+      <width>81</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="maximum">
+     <number>1000000000</number>
+    </property>
+    <property name="value">
+     <number>0</number>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="sb_decel_0">
+    <property name="geometry">
+     <rect>
+      <x>1140</x>
+      <y>20</y>
+      <width>81</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="maximum">
+     <number>1000000000</number>
+    </property>
+    <property name="value">
+     <number>1000</number>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="sb_accel_0">
+    <property name="geometry">
+     <rect>
+      <x>1050</x>
+      <y>20</y>
+      <width>81</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="maximum">
+     <number>1000000000</number>
+    </property>
+    <property name="value">
+     <number>1000</number>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="cb_mode_0">
+    <property name="geometry">
+     <rect>
+      <x>980</x>
+      <y>20</y>
+      <width>61</width>
+      <height>27</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="sb_maxpos_0">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>800</x>
+      <y>20</y>
+      <width>81</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="maximum">
+     <number>1000000000</number>
+    </property>
+    <property name="value">
+     <number>250000</number>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="sb_maxcur_0">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>890</x>
+      <y>20</y>
+      <width>81</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="maximum">
+     <number>10000</number>
+    </property>
+    <property name="value">
+     <number>500</number>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="ch_limit_0">
+    <property name="geometry">
+     <rect>
+      <x>680</x>
+      <y>20</y>
+      <width>21</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="sb_maxoutcurr_0">
+    <property name="geometry">
+     <rect>
+      <x>1320</x>
+      <y>20</y>
+      <width>81</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="maximum">
+     <number>1000000000</number>
+    </property>
+    <property name="value">
+     <number>800</number>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pb_stop_0">
+    <property name="geometry">
+     <rect>
+      <x>1750</x>
+      <y>20</y>
+      <width>27</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset resource="../resources/images.qrc">
+      <normaloff>:/images/stop.png</normaloff>:/images/stop.png</iconset>
+    </property>
+   </widget>
+   <widget class="QSlider" name="hs_target_0">
+    <property name="geometry">
+     <rect>
+      <x>1430</x>
+      <y>20</y>
+      <width>180</width>
+      <height>29</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pb_send_0">
+    <property name="geometry">
+     <rect>
+      <x>1720</x>
+      <y>20</y>
+      <width>27</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset resource="../resources/images.qrc">
+      <normaloff>:/images/play.png</normaloff>:/images/play.png</iconset>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="sb_target_0">
+    <property name="geometry">
+     <rect>
+      <x>1630</x>
+      <y>20</y>
+      <width>81</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="maximum">
+     <number>1000000000</number>
+    </property>
+    <property name="value">
+     <number>0</number>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbl_name_0">
+    <property name="geometry">
+     <rect>
+      <x>60</x>
+      <y>20</y>
+      <width>111</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Selected nodes</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="ch_enable_0">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>20</y>
+      <width>20</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="checked">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="ch_selected_0">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>20</y>
+      <width>20</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QLabel" name="label_20">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>130</y>
+     <width>21</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>on</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_13">
+   <property name="geometry">
+    <rect>
+     <x>1150</x>
+     <y>130</y>
+     <width>90</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>prof decel</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_2">
+   <property name="geometry">
+    <rect>
+     <x>330</x>
+     <y>130</y>
+     <width>61</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>nodeID</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_6">
+   <property name="geometry">
+    <rect>
+     <x>810</x>
+     <y>130</y>
+     <width>65</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>max pos</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_5">
+   <property name="geometry">
+    <rect>
+     <x>720</x>
+     <y>130</y>
+     <width>65</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>min pos</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_14">
+   <property name="geometry">
+    <rect>
+     <x>1060</x>
+     <y>130</y>
+     <width>90</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>prof accel</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_15">
+   <property name="geometry">
+    <rect>
+     <x>1330</x>
+     <y>130</y>
+     <width>100</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>max out curr</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_19">
+   <property name="geometry">
+    <rect>
+     <x>40</x>
+     <y>130</y>
+     <width>21</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>sel</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>70</x>
+     <y>130</y>
+     <width>66</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <weight>75</weight>
+     <italic>false</italic>
+     <bold>true</bold>
+     <kerning>true</kerning>
+    </font>
+   </property>
+   <property name="text">
+    <string>name</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_7">
+   <property name="geometry">
+    <rect>
+     <x>990</x>
+     <y>130</y>
+     <width>65</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>mode</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_11">
+   <property name="geometry">
+    <rect>
+     <x>900</x>
+     <y>130</y>
+     <width>70</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>max curr</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_17">
+   <property name="geometry">
+    <rect>
+     <x>1440</x>
+     <y>130</y>
+     <width>50</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>target</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_8">
+   <property name="geometry">
+    <rect>
+     <x>1730</x>
+     <y>130</y>
+     <width>60</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>control</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_10">
+   <property name="geometry">
+    <rect>
+     <x>680</x>
+     <y>130</y>
+     <width>30</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>limit</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_3">
+   <property name="geometry">
+    <rect>
+     <x>390</x>
+     <y>130</y>
+     <width>80</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>position</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_4">
+   <property name="geometry">
+    <rect>
+     <x>490</x>
+     <y>130</y>
+     <width>61</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>current</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_9">
+   <property name="geometry">
+    <rect>
+     <x>570</x>
+     <y>130</y>
+     <width>90</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>Statusword</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_16">
+   <property name="geometry">
+    <rect>
+     <x>1240</x>
+     <y>130</y>
+     <width>100</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>prof vel</string>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="ch_enablePublish">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>860</y>
+     <width>121</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Enable state</string>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_12">
+   <property name="geometry">
+    <rect>
+     <x>270</x>
+     <y>130</y>
+     <width>51</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <weight>75</weight>
+     <italic>false</italic>
+     <bold>true</bold>
+     <kerning>true</kerning>
+    </font>
+   </property>
+   <property name="text">
+    <string>board</string>
+   </property>
+  </widget>
+ </widget>
+ <resources>
+  <include location="../resources/images.qrc"/>
+ </resources>
+ <connections/>
+</ui>

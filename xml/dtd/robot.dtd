@@ -1,0 +1,110 @@
+<!ELEMENT robot (muscles)>
+
+<!ELEMENT muscles (muscle*)>
+
+<!ELEMENT muscle (force, velocity, voltage, potiPosition, spindleRadius, kalmanFilter, controllers, actuator)>
+<!ATTLIST muscle
+    muscleName ID #REQUIRED
+    canId CDATA #REQUIRED
+>
+
+<!ELEMENT force EMPTY>
+<!ATTLIST force
+    max CDATA #REQUIRED
+    min CDATA #REQUIRED
+>
+
+<!ELEMENT velocity EMPTY>
+<!ATTLIST velocity
+    max CDATA #REQUIRED
+    min CDATA #REQUIRED
+>
+
+<!ELEMENT voltage EMPTY>
+<!ATTLIST voltage
+    max CDATA #REQUIRED
+    min CDATA #REQUIRED
+>
+
+<!ELEMENT potiPosition EMPTY>
+<!ATTLIST potiPosition
+    max CDATA #REQUIRED
+    min CDATA #REQUIRED
+>
+
+<!ELEMENT spindleRadius (#PCDATA)>
+
+
+<!ELEMENT kalmanFilter (A,B,H,Q,R,k_spring)>
+<!ATTLIST kalmanFilter>
+
+<!ELEMENT A (#PCDATA)>
+<!ATTLIST A
+    n CDATA #REQUIRED
+    m CDATA #REQUIRED
+>
+<!ELEMENT B (#PCDATA)>
+<!ATTLIST B
+    n CDATA #REQUIRED
+    m CDATA #REQUIRED
+>
+<!ELEMENT H (#PCDATA)>
+<!ATTLIST H
+    n CDATA #REQUIRED
+    m CDATA #REQUIRED
+>
+<!ELEMENT Q (#PCDATA)>
+<!ATTLIST Q
+    n CDATA #REQUIRED
+    m CDATA #REQUIRED
+>
+<!ELEMENT R (#PCDATA)>
+<!ATTLIST R
+    n CDATA #REQUIRED
+    m CDATA #REQUIRED
+>
+<!ELEMENT k_spring (#PCDATA)>
+
+<!ELEMENT actuator EMPTY>
+
+<!ELEMENT controllers (forceControl,velocityControl,potiControl)>
+<!ATTLIST controllers
+  maxposVoltage CDATA #REQUIRED
+  minposVoltage CDATA #REQUIRED
+  maxnegVoltage CDATA #REQUIRED
+  minnegVoltage CDATA #REQUIRED
+>
+
+<!ELEMENT forceControl (pController| piController| pidController| pdController| stateController)>
+<!ATTLIST forceControl>
+
+<!ELEMENT velocityControl (pController| piController| pidController| pdController| stateController)>
+<!ATTLIST velocityControl>
+
+<!ELEMENT potiControl (pController| piController| pidController| pdController| stateController)>
+<!ATTLIST potiControl>
+
+<!ELEMENT pController (P, Eps)>
+<!ATTLIST pController>
+
+<!ELEMENT piController (P, I)>
+<!ATTLIST piController>
+
+<!ELEMENT pidController (P, I, D)>
+<!ATTLIST pidController>
+
+<!ELEMENT pdController (P, D)>
+<!ATTLIST pdController>
+
+<!ELEMENT stateController (kT)>
+<!ATTLIST stateController>
+
+<!ELEMENT P (#PCDATA)>
+<!ELEMENT I (#PCDATA)>
+<!ELEMENT D (#PCDATA)>
+<!ELEMENT Eps (#PCDATA)>
+<!ELEMENT kT (#PCDATA)>
+<!ATTLIST kT
+    n CDATA #REQUIRED
+    m CDATA #REQUIRED
+>

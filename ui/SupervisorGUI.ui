@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>SupervisorGUIClass</class>
+ <widget class="QWidget" name="SupervisorGUIClass">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Robot Supervisor</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="../resources/images.qrc">
+    <normaloff>:/images/supervision3.png</normaloff>:/images/supervision3.png</iconset>
+  </property>
+  <widget class="QTabWidget" name="tabWidget">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>30</y>
+     <width>781</width>
+     <height>561</height>
+    </rect>
+   </property>
+   <property name="currentIndex">
+    <number>0</number>
+   </property>
+   <widget class="QWidget" name="tab">
+    <attribute name="title">
+     <string>Controller</string>
+    </attribute>
+   </widget>
+   <widget class="QWidget" name="tab_3">
+    <attribute name="title">
+     <string>Sensor</string>
+    </attribute>
+   </widget>
+   <widget class="QWidget" name="tab_5">
+    <attribute name="title">
+     <string>Communication</string>
+    </attribute>
+   </widget>
+   <widget class="QWidget" name="tab_4">
+    <attribute name="title">
+     <string>Computer</string>
+    </attribute>
+   </widget>
+   <widget class="QWidget" name="tab_2">
+    <attribute name="title">
+     <string>Battery</string>
+    </attribute>
+   </widget>
+  </widget>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources>
+  <include location="../resources/images.qrc"/>
+ </resources>
+ <connections/>
+</ui>
