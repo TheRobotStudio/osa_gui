@@ -1,2 +1,2 @@
 #!/bin/bash
-rxgraph
+rqt_graph
