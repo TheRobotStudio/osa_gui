@@ -227,9 +227,31 @@ BasicControlGUI::BasicControlGUI(QWidget *parent) :
 	addPBasicControlGUI_controller(new BasicControlGUI_controller(m_ui.tab_sb_2, 2, QString("EPOS4"), 2, QString("Left wheel")));
 */
 
+	//Right arm
+	addPBasicControlGUI_controller(new BasicControlGUI_controller(m_ui.tab_sb_1, 1, QString("EPOS2"), 1, QString("R Biceps")));
+	addPBasicControlGUI_controller(new BasicControlGUI_controller(m_ui.tab_sb_1, 1, QString("EPOS2"), 2, QString("R Supra")));
+	addPBasicControlGUI_controller(new BasicControlGUI_controller(m_ui.tab_sb_1, 1, QString("EPOS2"), 3, QString("R Subscap")));
+	addPBasicControlGUI_controller(new BasicControlGUI_controller(m_ui.tab_sb_1, 1, QString("EPOS2"), 4, QString("R Infra")));
+	addPBasicControlGUI_controller(new BasicControlGUI_controller(m_ui.tab_sb_1, 1, QString("EPOS2"), 5, QString("R Tmin")));
+	addPBasicControlGUI_controller(new BasicControlGUI_controller(m_ui.tab_sb_1, 1, QString("EPOS2"), 6, QString("R LatDelt")));
+	addPBasicControlGUI_controller(new BasicControlGUI_controller(m_ui.tab_sb_1, 1, QString("EPOS2"), 7, QString("R AntDelt")));
+	addPBasicControlGUI_controller(new BasicControlGUI_controller(m_ui.tab_sb_1, 1, QString("EPOS2"), 8, QString("R PostDelt")));
+	addPBasicControlGUI_controller(new BasicControlGUI_controller(m_ui.tab_sb_1, 1, QString("EPOS2"), 9, QString("R Triceps")));
+	addPBasicControlGUI_controller(new BasicControlGUI_controller(m_ui.tab_sb_1, 1, QString("EPOS2"), 10, QString("R Brachi")));
+	addPBasicControlGUI_controller(new BasicControlGUI_controller(m_ui.tab_sb_1, 1, QString("EPOS2"), 11, QString("R Hand")));
+	addPBasicControlGUI_controller(new BasicControlGUI_controller(m_ui.tab_sb_1, 1, QString("EPOS2"), 12, QString("R Rotator")));
+	addPBasicControlGUI_controller(new BasicControlGUI_controller(m_ui.tab_sb_1, 1, QString("EPOS2"), 13, QString("R WristIn")));
+	addPBasicControlGUI_controller(new BasicControlGUI_controller(m_ui.tab_sb_1, 1, QString("EPOS2"), 14, QString("R WristUp")));
+	addPBasicControlGUI_controller(new BasicControlGUI_controller(m_ui.tab_sb_1, 1, QString("EPOS2"), 15, QString("R WristDown")));
+	addPBasicControlGUI_controller(new BasicControlGUI_controller(m_ui.tab_sb_1, 1, QString("EPOS2"), 16, QString("R Thumb")));
+	//Base
+	addPBasicControlGUI_controller(new BasicControlGUI_controller(m_ui.tab_sb_1, 1, QString("EPOS4"), 17, QString("Right wheel")));
+	addPBasicControlGUI_controller(new BasicControlGUI_controller(m_ui.tab_sb_1, 1, QString("EPOS4"), 18, QString("Left wheel")));
+
+
 	//Mobile robot base with 2 wheels
-	addPBasicControlGUI_controller(new BasicControlGUI_controller(m_ui.tab_sb_1, 1, QString("EPOS4"), 1, QString("Right wheel")));
-	addPBasicControlGUI_controller(new BasicControlGUI_controller(m_ui.tab_sb_1, 1, QString("EPOS4"), 2, QString("Left wheel")));
+	//addPBasicControlGUI_controller(new BasicControlGUI_controller(m_ui.tab_sb_1, 1, QString("EPOS4"), 1, QString("Right wheel")));
+	//addPBasicControlGUI_controller(new BasicControlGUI_controller(m_ui.tab_sb_1, 1, QString("EPOS4"), 2, QString("Left wheel")));
 }
 
 /*! \fn

@@ -45,7 +45,7 @@
 #include "robotDefines.h"
 
 /*! Defines */
-#define LOOP_RATE				HEART_BEAT
+#define LOOP_RATE	HEART_BEAT
 
 /*! Namespaces */
 using namespace osa_gui;
