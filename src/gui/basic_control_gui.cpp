@@ -225,12 +225,12 @@ BasicControlGUI::BasicControlGUI(QWidget *parent) :
 
 	//std::string test = basic_control_node_.getDOFMotorList().at(0);
 
-	for(int i=0; basic_control_node_.getNumberEPOSBoards(); i++)
+	for(int i=0; i<basic_control_node_.getNumberEPOSBoards(); i++)
 	{
 		addBasicControlGUIController(new BasicControlGUIController(ui_.sa_dof,
 				QString::fromStdString(basic_control_node_.getDOFControllerList().at(i)),
 				basic_control_node_.getDOFNodeIDList().at(i),
-				QString::fromStdString(basic_control_node_.getDOFMotorList().at(i))));
+				QString::fromStdString(basic_control_node_.getDOFNameList().at(i))));
 	}
 
 /*
