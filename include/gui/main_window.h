@@ -63,6 +63,7 @@ class MainWindow : public QMainWindow
 Q_OBJECT
 
 public:
+
 	/**
 	 * @brief Constructor.
 	 */

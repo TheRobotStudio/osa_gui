@@ -59,7 +59,8 @@ class PlotGUI : public QMdiSubWindow //QMainWindow
 Q_OBJECT
 
 public:
-	//explicit RobotPlotGUI(QWidget *parent = 0);
+	//explicit PlotGUI(QWidget *parent = 0);
+
 	/**
 	 * @brief Constructor.
 	 */

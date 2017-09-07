@@ -31,9 +31,9 @@
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>90</y>
+     <y>620</y>
      <width>1891</width>
-     <height>751</height>
+     <height>221</height>
     </rect>
    </property>
    <property name="currentIndex">
@@ -44,31 +44,6 @@
      <string>SlaveBoard 1</string>
     </attribute>
     <layout class="QVBoxLayout" name="verticalLayout_7"/>
-   </widget>
-   <widget class="QWidget" name="tab_sb_2">
-    <attribute name="title">
-     <string>SlaveBoard 2</string>
-    </attribute>
-   </widget>
-   <widget class="QWidget" name="tab_sb_3">
-    <attribute name="title">
-     <string>SlaveBoard 3</string>
-    </attribute>
-   </widget>
-   <widget class="QWidget" name="tab_sb_4">
-    <attribute name="title">
-     <string>SlaveBoard 4</string>
-    </attribute>
-   </widget>
-   <widget class="QWidget" name="tab_sb_5">
-    <attribute name="title">
-     <string>SlaveBoard 5</string>
-    </attribute>
-   </widget>
-   <widget class="QWidget" name="tab_sb_6">
-    <attribute name="title">
-     <string>SlaveBoard 6</string>
-    </attribute>
    </widget>
   </widget>
   <widget class="QGroupBox" name="groupBox_2">
@@ -728,6 +703,29 @@
    <property name="text">
     <string>board</string>
    </property>
+  </widget>
+  <widget class="QScrollArea" name="sa_dof">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>160</y>
+     <width>1891</width>
+     <height>441</height>
+    </rect>
+   </property>
+   <property name="widgetResizable">
+    <bool>true</bool>
+   </property>
+   <widget class="QWidget" name="scrollAreaWidgetContents">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>1889</width>
+      <height>439</height>
+     </rect>
+    </property>
+   </widget>
   </widget>
  </widget>
  <resources>

@@ -51,7 +51,19 @@
 using namespace osa_gui;
 using namespace rosnode;
 
-BasicControlNode::BasicControlNode() : enable_publish_(true)
+BasicControlNode::BasicControlNode() :
+	robot_name_(""),
+	robot_can_device_(""),
+	number_epos_boards_(0),
+	dof_name_list_(QList<std::string>()),
+	dof_type_list_(QList<std::string>()),
+	dof_node_id_list_(QList<int>()),
+	dof_controller_list_(QList<std::string>()),
+	dof_motor_list_(QList<std::string>()),
+	dof_inverted_list_(QList<bool>()),
+	dof_mode_list_(QList<std::string>()),
+	dof_value_list_(QList<int>()),
+	enable_publish_(true)
 {
 
 }
@@ -81,6 +93,207 @@ bool BasicControlNode::init()
 
 	ros::start(); // explicitly needed since our nodehandle is going out of scope.
 	ros::NodeHandle nh;
+
+	// Grab the parameters //TODO avoid WET code, do DRY code, same as in class CANLayer od osa_communication package
+	try
+	{
+		//load robot parameters
+		if(!nh.param("/robot/name", robot_name_, std::string("my_robot")))
+		{
+			ROS_WARN("No /robot/name found in YAML config file");
+		}
+
+		if(!nh.param("/robot/dof", number_epos_boards_, int(2)))
+		{
+			ROS_WARN("No /robot/dof found in YAML config file");
+		}
+
+		if(!nh.param("/robot/can_device", robot_can_device_, std::string("can0")))
+		{
+			ROS_WARN("No /robot/can_device found in YAML config file");
+		}
+
+		ROS_INFO("Robot name=%s, dof=%d, can=%s", robot_name_.c_str(), number_epos_boards_, robot_can_device_.c_str());
+/*
+		//load mobile_base parameters
+		if(nh.searchParam("/mobile_base", mobile_base_str))
+		{
+			ROS_INFO("/mobile_base found in YAML config file");
+		}
+		else
+		{
+			ROS_WARN("No /mobile_base found in YAML config file");
+		}
+*/
+		//load controllers parameters
+		//Example:
+		//controller1: {node_id: 1, name: 'right wheel', type: 'EPOS4', inverted: true, motor: 'EC90', mode: 'PROFILE_VELOCITY_MODE', value: 0}
+
+		bool dof_exist = true;
+		//start with controller 1
+		int dof_idx = 1;
+		std::string rad_str = "dof"; //common radical name
+
+		while(dof_exist)
+		{
+			//create the string "controller+index" to search for the controller parameter with that index number
+			std::ostringstream dof_idx_path;
+			dof_idx_path << rad_str << dof_idx;
+
+			std::string absolute_str = "absolute_str";
+
+			//ROS_INFO("string=%s", dof_idx_path.str().c_str());
+
+			if(nh.searchParam(dof_idx_path.str(), absolute_str))
+			{
+				//ROS_INFO("%s found in YAML config file", dof_idx_path.str().c_str());
+				//ROS_INFO("absolute_str = %s", absolute_str.c_str());
+
+				//create variables to store the controller parameters:
+				std:: string name;
+				std:: string type;
+				int node_id = 0;
+				std:: string controller;
+				std:: string motor;
+				bool inverted;
+				std:: string mode;
+				int value;
+
+				//grab the parameters of the current controller
+
+				//name
+				std::ostringstream name_path;
+				name_path << absolute_str << "/name";
+				if(!nh.getParam(name_path.str(), name))
+				{
+					ROS_ERROR("Can't grab param name for %s", dof_idx_path.str().c_str());
+					return false;
+				}
+
+				//type
+				std::ostringstream type_path;
+				type_path << absolute_str << "/type";
+				if(!nh.getParam(type_path.str(), type))
+				{
+					ROS_ERROR("Can't grab param type for %s", dof_idx_path.str().c_str());
+					return false;
+				}
+
+				//node_id
+				std::ostringstream node_id_path;
+				node_id_path << absolute_str << "/node_id";
+				if(!nh.getParam(node_id_path.str(), node_id))
+				{
+					ROS_ERROR("Can't grab param node_id for %s", dof_idx_path.str().c_str());
+					return false;
+				}
+
+				//controller
+				std::ostringstream controller_path;
+				controller_path << absolute_str << "/controller";
+				if(!nh.getParam(controller_path.str(), controller))
+				{
+					ROS_ERROR("Can't grab param controller for %s", dof_idx_path.str().c_str());
+					return false;
+				}
+
+				//motor
+				std::ostringstream motor_path;
+				motor_path << absolute_str << "/motor";
+				if(!nh.getParam(motor_path.str(), motor))
+				{
+					ROS_ERROR("Can't grab param motor for %s", dof_idx_path.str().c_str());
+					return false;
+				}
+
+				//inverted
+				std::ostringstream inverted_path;
+				inverted_path << absolute_str << "/inverted";
+				if(!nh.getParam(inverted_path.str(), inverted))
+				{
+					ROS_ERROR("Can't grab param inverted for %s", dof_idx_path.str().c_str());
+					return false;
+				}
+
+				//mode
+				std::ostringstream mode_path;
+				mode_path << absolute_str << "/mode";
+				if(!nh.getParam(mode_path.str(), mode))
+				{
+					ROS_ERROR("Can't grab param mode for %s", dof_idx_path.str().c_str());
+					return false;
+				}
+
+				//value
+				std::ostringstream value_path;
+				value_path << absolute_str << "/value";
+				if(!nh.getParam(value_path.str(), value))
+				{
+					ROS_ERROR("Can't grab param value for %s", dof_idx_path.str().c_str());
+					return false;
+				}
+
+				//print the dof parameters
+				ROS_INFO("%s : name[%s], type[%s], node_id[%d], controller[%s], motor[%s], inverted[%d], mode[%s], value[%d]", dof_idx_path.str().c_str(),
+						name.c_str(), type.c_str(), node_id, controller.c_str(), motor.c_str(), inverted, mode.c_str(), value);
+
+				//save the dof data in the attributes
+				//number_epos_boards_
+				dof_name_list_.push_back(name);
+				dof_type_list_.push_back(type);
+				dof_node_id_list_.push_back(node_id);
+				dof_controller_list_.push_back(controller);
+				dof_motor_list_.push_back(motor);
+				dof_inverted_list_.push_back(inverted);
+				dof_mode_list_.push_back(mode);
+				dof_value_list_.push_back(value);
+
+				//increment to search for the next controller
+				dof_idx++;
+			}
+			else
+			{
+				dof_exist = false;
+				//ROS_INFO("No more controllers found in YAML config file");
+			}
+
+			//dof_exist = false;
+		}
+
+		dof_idx--;
+		if(number_epos_boards_ == dof_idx) ROS_INFO("Same number of DOF(%d) and controllers(%d) defined in the YAML config file!", number_epos_boards_, dof_idx);
+		else
+		{
+			ROS_WARN("Not the same number of DOF(%d) and controllers(%d) defined in the YAML config file!", number_epos_boards_, dof_idx);
+			throw 1;
+		}
+
+		/*
+		nh.param("can_device", can_device_str, std::string("can0"));
+		//mot1
+		nh.param("controller1_type", controller1_type_str, std::string("EPOS4"));
+		nh.param("motor1_type", motor1_type_str, std::string("EC90"));
+		nh.param("motor1_inverted", motor1_inverted_bool, bool(true));
+		nh.param("mode1", mode1_str, std::string("PROFILE_VELOCITY_MODE"));
+		nh.param("value1", value1_int, int(0));
+		//mot2
+		nh.param("controller2_type", controller2_type_str, std::string("EPOS4"));
+		nh.param("motor2_type", motor2_type_str, std::string("EC90"));
+		nh.param("motor2_inverted", motor2_inverted_bool, bool(false));
+		nh.param("mode2", mode2_str, std::string("PROFILE_VELOCITY_MODE"));
+		//nh.param("value2", value2_int, int(0));
+		nh.param("value2", value2_int);
+		*/
+
+		ROS_INFO("Parameters loaded successfully!\n");
+	}
+	catch(int exception)
+	{
+		ROS_ERROR("Parameters didn't load correctly!");
+		ROS_ERROR("Please modify your YAML config file and try again.");
+
+		return false;
+	}
 
 	//Publishers
 	pub_motor_cmd_array_ = nh.advertise<osa_msgs::MotorCmdMultiArray>("/set_motor_commands", 100, true);
