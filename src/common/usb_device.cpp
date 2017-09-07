@@ -25,69 +25,102 @@
  */
 
 /**
- * @file Pause.cpp
+ * @file usb_device.cpp
  * @author Cyril Jourdan
- * @date Dec 12, 2016
+ * @date Dec 13, 2016
  * @version 0.0.1
- * @brief Implementation file for class Pause
+ * @brief Implementation file for class USBDevice
  *
  * Contact: cyril.jourdan@therobotstudio.com
- * Created on : Dec 12, 2016
+ * Created on : Dec 13, 2016
  */
 
-#include <pause.h>
-#include <ros/ros.h>
-#include <QJsonArray>
-#include "robot_defines.h"
+#include <iostream>
+#include "usb_device.h"
 
 using namespace std;
 using namespace osa_gui;
-using namespace sequencer;
+using namespace common;
 using namespace Qt;
 
-//constructors
-Pause::Pause() :
-	SequenceElement(),
-	ms_duration_(0)
+USBDevice::USBDevice() :
+	Hardware(),
+	vendor_id_(QString("")),
+	product_id_(QString("")),
+	file_path_(QString(""))
 {
-
 }
 
-//destructor
-Pause::~Pause()
+USBDevice::~USBDevice()
 {
-
 }
 
-//setters
-int Pause::setMsDuration(uint32_t ms_duration)
+int USBDevice::setVendorID(QString vendor_id)
 {
-	ms_duration_ = ms_duration;
+	//check the value
+	if(!vendor_id.isEmpty())
+	{
+		vendor_id_ = vendor_id;
 
-	return 0;
+		return 0;
+	}
+	else
+		return -1;
 }
 
-void Pause::playElement(rosnode::SequencerNode* sequencerNode)
+int USBDevice::setProductID(QString product_id)
 {
-	ROS_INFO("Pause::playElement : Apply a %d ms pause.", ms_duration_);
-	double sleep = (double)ms_duration_;
-	sleep /= 1000;
-	ros::Duration(sleep).sleep();
+	//check the value
+	if(!product_id.isEmpty())
+	{
+		product_id_ = product_id;
 
-	//sequencerNode->setPause(ms_duration_);
-	//))m_pause.setMsDuration(ms_duration_);
+		return 0;
+	}
+	else
+		return -1;
 }
 
-void Pause::read(const QJsonObject &json)
+int USBDevice::setFilePatch(QString file_path)
 {
-	SequenceElement::read(json);
+	//check the value
+	if(!file_path.isEmpty())
+	{
+		file_path_ = file_path;
 
-	ms_duration_ = (uint32_t)json["ms_duration"].toDouble();
+		return 0;
+	}
+	else
+		return -1;
 }
 
-void Pause::write(QJsonObject &json) const
+void USBDevice::display()
 {
-	SequenceElement::write(json);
-
-	json["ms_duration"] = (double)ms_duration_;
+	cout << endl << "USBDevice: " << endl;
+	cout << "Vendor ID: " << vendor_id_.toStdString() << endl;
+	cout << "Product ID: " << product_id_.toStdString() << endl;
+	cout << "File path: " << file_path_.toStdString() << endl;
 }
+
+void USBDevice::read(const QJsonObject &json)
+{
+	//call mother class method
+	Hardware::read(json);
+
+	//read attributes
+	vendor_id_ = json["vendor_id"].toString();
+	product_id_ = json["product_id"].toString();
+	file_path_ = json["file_path"].toString();
+}
+
+void USBDevice::write(QJsonObject &json) const
+{
+	//call mother class method
+	Hardware::write(json);
+
+	//write attributes
+    json["vendor_id"] = vendor_id_;
+    json["product_id"] = product_id_;
+    json["file_path"] = file_path_;
+}
+

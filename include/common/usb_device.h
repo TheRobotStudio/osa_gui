@@ -25,69 +25,72 @@
  */
 
 /**
- * @file Pause.cpp
+ * @file usb_device.h
  * @author Cyril Jourdan
- * @date Dec 12, 2016
+ * @date Dec 13, 2016
  * @version 0.0.1
- * @brief Implementation file for class Pause
+ * @brief Header file for class USBDevice
  *
  * Contact: cyril.jourdan@therobotstudio.com
- * Created on : Dec 12, 2016
+ * Created on : Dec 13, 2016
  */
 
-#include <pause.h>
-#include <ros/ros.h>
-#include <QJsonArray>
-#include "robot_defines.h"
+#ifndef OSA_GUI_COMMON_USB_DEVICE_H
+#define OSA_GUI_COMMON_USB_DEVICE_H
 
-using namespace std;
-using namespace osa_gui;
-using namespace sequencer;
-using namespace Qt;
+#include <QString>
+#include <QJsonObject>
+#include "hardware.h"
 
-//constructors
-Pause::Pause() :
-	SequenceElement(),
-	ms_duration_(0)
+namespace osa_gui
+{
+namespace common
 {
 
-}
-
-//destructor
-Pause::~Pause()
+/**
+ * @brief This is the base class for USB devices like cameras for example.
+ */
+class USBDevice : public Hardware
 {
+protected:
+	/** @brief Constructor. */
+	USBDevice();
 
-}
+public:
+	/** @brief Destructor. */
+	virtual ~USBDevice();
 
-//setters
-int Pause::setMsDuration(uint32_t ms_duration)
-{
-	ms_duration_ = ms_duration;
+	//setters
+	/** @brief Destructor.
+	 *  @param
+	 *  @return int
+	 */
+	int setVendorID(QString vendor_id);
+	int setProductID(QString product_id);
+	int setFilePatch(QString file_path);
 
-	return 0;
-}
+	//TODO either have getter or setter, but probably not both, setting parameters can be instead in the constructor
+	//getters
+	QString	getVendorID() const { return vendor_id_; };
+	QString	getProductID() const { return product_id_; };
+	QString getFilePath() const { return file_path_; };
 
-void Pause::playElement(rosnode::SequencerNode* sequencerNode)
-{
-	ROS_INFO("Pause::playElement : Apply a %d ms pause.", ms_duration_);
-	double sleep = (double)ms_duration_;
-	sleep /= 1000;
-	ros::Duration(sleep).sleep();
+	//other methods
+	virtual void display();
 
-	//sequencerNode->setPause(ms_duration_);
-	//))m_pause.setMsDuration(ms_duration_);
-}
+	/** @brief Read method for JSON serialization. */
+	virtual void read(const QJsonObject &json);
 
-void Pause::read(const QJsonObject &json)
-{
-	SequenceElement::read(json);
+	/** @brief Write method for JSON serialization. */
+	virtual void write(QJsonObject &json) const;
 
-	ms_duration_ = (uint32_t)json["ms_duration"].toDouble();
-}
+protected:
+	QString	vendor_id_;
+	QString	product_id_;
+	QString file_path_;
+};
 
-void Pause::write(QJsonObject &json) const
-{
-	SequenceElement::write(json);
+} // namespace common
+} // namespace osa_gui
 
-	json["ms_duration"] = (double)ms_duration_;
-}
+#endif // OSA_GUI_COMMON_USB_DEVICE_H

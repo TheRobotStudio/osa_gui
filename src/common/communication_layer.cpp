@@ -25,41 +25,50 @@
  */
 
 /**
- * @file Sequence.cpp
+ * @file communication_layer.cpp
  * @author Cyril Jourdan
- * @date Dec 12, 2016
- * @version 0.0.1
- * @brief Implementation file for abstract class Sequence
+ * @date Dec 9, 2016
+ * @version 0.1.0
+ * @brief Implementation file for class CommunicationLayer
  *
  * Contact: cyril.jourdan@therobotstudio.com
- * Created on : Dec 12, 2016
+ * Created on : Dec 9, 2016
  */
 
-#include <sequence.h>
-#include <QJsonArray>
+#include <iostream>
+#include "communication_layer.h"
 
 using namespace std;
 using namespace osa_gui;
-using namespace sequencer;
+using namespace common;
 using namespace Qt;
 
-Sequence::Sequence() :
-		sequence_element_list_(QList<SequenceElement*>())
+CommunicationLayer::CommunicationLayer() :
+	name_(QString("")),
+	state_(false)
 {
 }
 
-Sequence::~Sequence()
+/*
+CommunicationLayer::CommunicationLayer(QString name) : name_(name), state_(false)
 {
+}*/
+/*
+CommunicationLayer::CommunicationLayer(CommunicationLayer const& communicationLayer) : name_(communicationLayer.name_), state_(communicationLayer.state_)
+{
+}
+*/
 
+CommunicationLayer::~CommunicationLayer()
+{
 }
 
-//setters
-int Sequence::addSequenceElement(SequenceElement* ptr_sequence_element)
+int CommunicationLayer::setName(QString name)
 {
 	//check the value
-	if(ptr_sequence_element != 0)
+	if(!name.isEmpty())
 	{
-		sequence_element_list_.append(ptr_sequence_element);
+		name_ = name;
 
 		return 0;
 	}
@@ -67,38 +76,56 @@ int Sequence::addSequenceElement(SequenceElement* ptr_sequence_element)
 		return -1;
 }
 
-void Sequence::playSequence(rosnode::SequencerNode* sequencer_node)
+int CommunicationLayer::setState(bool state)
 {
-	foreach(SequenceElement* ptr_sequence_element, sequence_element_list_)
+	//check the value
+	if((state == true) || (state == false))
 	{
-		ptr_sequence_element->playElement(sequencer_node);
+		state_ = state;
+
+		return 0;
 	}
+	else
+		return -1;
 }
 
-void Sequence::read(const QJsonObject &json)
+int CommunicationLayer::openCommunication()
 {
-	//SequenceElement pointer QList
-	sequence_element_list_.clear();
-	QJsonArray sequenceElementArray = json["ptr_sequence_element"].toArray();
-
-	for(int i = 0; i<sequenceElementArray.size(); ++i)
+	if(state_ == false)
 	{
-		QJsonObject ptr_sequence_elementObject = sequenceElementArray[i].toObject();
-		SequenceElement* ptr_sequence_element;
-		ptr_sequence_element->read(ptr_sequence_elementObject);
-		sequence_element_list_.append(ptr_sequence_element);
+		setState(true);
+		return 0;
 	}
+	else
+		return -1;
 }
 
-void Sequence::write(QJsonObject &json) const
+int CommunicationLayer::closeCommunication()
 {
-	//SequenceElement pointer QList
-	QJsonArray sequenceElementArray;
-	foreach(const SequenceElement* ptr_sequence_element, sequence_element_list_)
+	if(state_ == true)
 	{
-		QJsonObject ptr_sequence_elementObject;
-		ptr_sequence_element->write(ptr_sequence_elementObject);
-		sequenceElementArray.append(ptr_sequence_elementObject);
+		setState(false);
+		return 0;
 	}
-	json["ptr_sequence_element"] = sequenceElementArray;
+	else
+		return -1;
+}
+
+void CommunicationLayer::display()
+{
+	cout << endl << "CommunicationLayer: " << endl;
+	cout << "Name: " << name_.toStdString() << endl;
+	cout << "State: " << state_ << endl;
+}
+
+void CommunicationLayer::read(const QJsonObject &json)
+{
+	name_ = json["name"].toString();
+	state_ = json["state"].toBool();
+}
+
+void CommunicationLayer::write(QJsonObject &json) const
+{
+	json["name"] = name_;
+	json["state"] = state_;
 }

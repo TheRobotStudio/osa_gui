@@ -25,69 +25,90 @@
  */
 
 /**
- * @file Pause.cpp
+ * @file /src/rosnode/plot_node.cpp
  * @author Cyril Jourdan
- * @date Dec 12, 2016
- * @version 0.0.1
- * @brief Implementation file for class Pause
+ * @date Mar 21, 2017
+ * @version OSA 0.1.0
+ * @brief Implementation file for the ROS class PlotNode.
  *
  * Contact: cyril.jourdan@therobotstudio.com
- * Created on : Dec 12, 2016
+ * Created on : Mar 17, 2017
  */
 
-#include <pause.h>
+
+/*! Includes */
+#include <plot_node.h>
 #include <ros/ros.h>
-#include <QJsonArray>
+#include <ros/network.h>
+#include <string>
+#include <std_msgs/String.h>
+#include <sstream>
 #include "robot_defines.h"
 
-using namespace std;
+/*! Defines */
+#define LOOP_RATE	HEART_BEAT
+
+/*! Namespaces */
 using namespace osa_gui;
-using namespace sequencer;
-using namespace Qt;
+using namespace rosnode;
 
-//constructors
-Pause::Pause() :
-	SequenceElement(),
-	ms_duration_(0)
+PlotNode::PlotNode()
 {
-
 }
 
-//destructor
-Pause::~Pause()
+PlotNode::~PlotNode()
 {
-
+	if(ros::isStarted())
+	{
+	  ros::shutdown(); // explicitly needed since we use ros::start();
+	  ros::waitForShutdown();
+	}
+	wait();
 }
 
-//setters
-int Pause::setMsDuration(uint32_t ms_duration)
+bool PlotNode::init()
 {
-	ms_duration_ = ms_duration;
+	int init_argc = 0;
+	char** init_argv = 0;
+	ros::init(init_argc,init_argv,"osa_PlotNode");
 
-	return 0;
+	if (! ros::master::check())
+	{
+		return false;
+	}
+
+	ros::start(); // explicitly needed since our nodehandle is going out of scope.
+	ros::NodeHandle nh;
+
+	//Subscribers
+	sub_motor_data_array_ = nh.subscribe("/motor_data_array", 10, &PlotNode::motorDataArrayCallback, this);
+
+	start();
+	return true;
 }
 
-void Pause::playElement(rosnode::SequencerNode* sequencerNode)
+void PlotNode::motorDataArrayCallback(const osa_msgs::MotorDataMultiArrayConstPtr& data)
 {
-	ROS_INFO("Pause::playElement : Apply a %d ms pause.", ms_duration_);
-	double sleep = (double)ms_duration_;
-	sleep /= 1000;
-	ros::Duration(sleep).sleep();
-
-	//sequencerNode->setPause(ms_duration_);
-	//))m_pause.setMsDuration(ms_duration_);
+	motor_data_array_ = *data;
+	Q_EMIT motorDataReceived();
 }
 
-void Pause::read(const QJsonObject &json)
+void PlotNode::run()
 {
-	SequenceElement::read(json);
+	ros::Rate loop_rate(LOOP_RATE);
 
-	ms_duration_ = (uint32_t)json["ms_duration"].toDouble();
+	while (ros::ok())
+	{
+		ros::spinOnce();
+		loop_rate.sleep();
+
+	}
+
+	std::cout << "Ros shutdown, proceeding to close the gui." << std::endl;
+	Q_EMIT rosShutdown(); // used to signal the gui for a shutdown (useful to roslaunch)
 }
 
-void Pause::write(QJsonObject &json) const
+osa_msgs::MotorDataMultiArray PlotNode::getMotorDataArray()
 {
-	SequenceElement::write(json);
-
-	json["ms_duration"] = (double)ms_duration_;
+	return motor_data_array_;
 }

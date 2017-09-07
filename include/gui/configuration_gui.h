@@ -25,69 +25,61 @@
  */
 
 /**
- * @file Pause.cpp
+ * @file configuration_gui.h
  * @author Cyril Jourdan
- * @date Dec 12, 2016
- * @version 0.0.1
- * @brief Implementation file for class Pause
+ * @date Feb 20, 2017
+ * @version OSA 0.1.0
+ * @brief Header file for Qt based gui class ConfigurationGUI.
  *
  * Contact: cyril.jourdan@therobotstudio.com
- * Created on : Dec 12, 2016
+ * Created on : Feb 20, 2017
  */
 
-#include <pause.h>
-#include <ros/ros.h>
-#include <QJsonArray>
-#include "robot_defines.h"
+#ifndef OSA_GUI_GUI_CONFIGURATION_GUI_H
+#define OSA_GUI_GUI_CONFIGURATION_GUI_H
 
-using namespace std;
-using namespace osa_gui;
-using namespace sequencer;
-using namespace Qt;
+#include <QMdiSubWindow>
+#include "ui_ConfigurationGUI.h"
 
-//constructors
-Pause::Pause() :
-	SequenceElement(),
-	ms_duration_(0)
+namespace osa_gui
+{
+namespace gui
 {
 
-}
-
-//destructor
-Pause::~Pause()
+/**
+ * @brief This defines the Qt GUI for the configuration window.
+ */
+class ConfigurationGUI : public QMdiSubWindow
 {
+Q_OBJECT
 
-}
+public:
+	/**
+	 * @brief Constructor.
+	 */
+	ConfigurationGUI(QWidget *parent = 0);
 
-//setters
-int Pause::setMsDuration(uint32_t ms_duration)
-{
-	ms_duration_ = ms_duration;
+	/**
+	 * @brief Destructor.
+	 */
+	~ConfigurationGUI();
 
-	return 0;
-}
+public Q_SLOTS:
+	/*! Auto-connections (connectSlotsByName()) */
+	void on_treev_robot_itemClicked(QTreeWidgetItem *item, int column);
+	void on_cb_type_currentIndexChanged(int index);
+	void on_pb_addHardware_clicked();
+	void on_pb_wizard_clicked();
 
-void Pause::playElement(rosnode::SequencerNode* sequencerNode)
-{
-	ROS_INFO("Pause::playElement : Apply a %d ms pause.", ms_duration_);
-	double sleep = (double)ms_duration_;
-	sleep /= 1000;
-	ros::Duration(sleep).sleep();
+private:
+	void addTreeRoot(QString name, QString description);
+	void addTreeChild(QTreeWidgetItem *parent, QString name, QString description);
 
-	//sequencerNode->setPause(ms_duration_);
-	//))m_pause.setMsDuration(ms_duration_);
-}
+private:
+	Ui::ConfigurationGUIClass ui_;
+};
 
-void Pause::read(const QJsonObject &json)
-{
-	SequenceElement::read(json);
+} // namespace gui
+} // namespace osa_gui
 
-	ms_duration_ = (uint32_t)json["ms_duration"].toDouble();
-}
-
-void Pause::write(QJsonObject &json) const
-{
-	SequenceElement::write(json);
-
-	json["ms_duration"] = (double)ms_duration_;
-}
+#endif // OSA_GUI_GUI_CONFIGURATION_GUI_H

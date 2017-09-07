@@ -22,7 +22,7 @@ include_directories(${catkin_INCLUDE_DIRS})
 
 file(GLOB QT_FORMS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ui/*.ui)
 file(GLOB QT_RESOURCES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} resources/*.qrc)
-file(GLOB_RECURSE QT_MOC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} FOLLOW_SYMLINKS include/common/*.hpp include/common/osa_msgs_json/*.hpp include/gui/*.hpp include/gui/qcustomplot/*.h include/rosnode/*.hpp include/sequencer/*.hpp)
+file(GLOB_RECURSE QT_MOC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} FOLLOW_SYMLINKS include/common/*.h include/common/osa_msgs_json/*.h include/gui/*.h include/gui/qcustomplot/*.h include/rosnode/*.h include/sequencer/*.h)
 file(GLOB_RECURSE QT_SOURCES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} FOLLOW_SYMLINKS src/main.cpp src/common/*.cpp src/common/osa_msgs_json/*.cpp src/gui/*.cpp src/gui/qcustomplot/*.cpp src/rosnode/*.cpp src/sequencer/*.cpp)
 
 qt5_add_resources(QT_RESOURCES_CPP ${QT_RESOURCES})

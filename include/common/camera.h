@@ -25,69 +25,68 @@
  */
 
 /**
- * @file Pause.cpp
+ * @file camera.h
  * @author Cyril Jourdan
- * @date Dec 12, 2016
+ * @date Dec 13, 2016
  * @version 0.0.1
- * @brief Implementation file for class Pause
+ * @brief Header file for class Camera
  *
  * Contact: cyril.jourdan@therobotstudio.com
- * Created on : Dec 12, 2016
+ * Created on : Dec 13, 2016
  */
 
-#include <pause.h>
-#include <ros/ros.h>
-#include <QJsonArray>
-#include "robot_defines.h"
+#ifndef OSA_GUI_COMMON_CAMERA_H
+#define OSA_GUI_COMMON_CAMERA_H
 
-using namespace std;
-using namespace osa_gui;
-using namespace sequencer;
-using namespace Qt;
+#include <QString>
+#include <QJsonObject>
+#include "sensor.h"
+#include "usb_device.h"
 
-//constructors
-Pause::Pause() :
-	SequenceElement(),
-	ms_duration_(0)
+namespace osa_gui
+{
+namespace common
 {
 
-}
-
-//destructor
-Pause::~Pause()
+/**
+ * @brief Class representing a camera.
+ */
+class Camera : public Sensor, public USBDevice
 {
+public:
+	/**
+	 * @brief Constructor.
+	 */
+	Camera();
 
-}
+	/**
+	 * @brief Destructor.
+	 */
+	virtual ~Camera();
 
-//setters
-int Pause::setMsDuration(uint32_t ms_duration)
-{
-	ms_duration_ = ms_duration;
+	//setters
+	int setType(QString type);
 
-	return 0;
-}
+	//getters
+	QString getType() const { return type_; };
 
-void Pause::playElement(rosnode::SequencerNode* sequencerNode)
-{
-	ROS_INFO("Pause::playElement : Apply a %d ms pause.", ms_duration_);
-	double sleep = (double)ms_duration_;
-	sleep /= 1000;
-	ros::Duration(sleep).sleep();
+	//other methods
+	virtual void display();
 
-	//sequencerNode->setPause(ms_duration_);
-	//))m_pause.setMsDuration(ms_duration_);
-}
+	/** @brief Read method for JSON serialization. */
+	virtual void read(const QJsonObject &json);
 
-void Pause::read(const QJsonObject &json)
-{
-	SequenceElement::read(json);
+	/** @brief Write method for JSON serialization. */
+	virtual void write(QJsonObject &json) const;
 
-	ms_duration_ = (uint32_t)json["ms_duration"].toDouble();
-}
+protected:
+	QString type_;
+	//resolution
+	//RGB/YUV
+	//framerate
+};
 
-void Pause::write(QJsonObject &json) const
-{
-	SequenceElement::write(json);
+} // namespace common
+} // namespace osa_gui
 
-	json["ms_duration"] = (double)ms_duration_;
-}
+#endif // OSA_GUI_COMMON_CAMERA_H

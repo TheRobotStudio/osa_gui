@@ -25,69 +25,74 @@
  */
 
 /**
- * @file Pause.cpp
+ * @file communication_layer.h
  * @author Cyril Jourdan
- * @date Dec 12, 2016
+ * @date Dec 9, 2016
  * @version 0.0.1
- * @brief Implementation file for class Pause
+ * @brief Header file for abstract class CommunicationLayer
  *
  * Contact: cyril.jourdan@therobotstudio.com
- * Created on : Dec 12, 2016
+ * Created on : Dec 9, 2016
  */
 
-#include <pause.h>
-#include <ros/ros.h>
-#include <QJsonArray>
-#include "robot_defines.h"
+#ifndef OSA_GUI_COMMON_COMMUNICATION_LAYER_H
+#define OSA_GUI_COMMON_COMMUNICATION_LAYER_H
 
-using namespace std;
-using namespace osa_gui;
-using namespace sequencer;
-using namespace Qt;
+#include <QString>
+#include <QJsonObject>
+#include <string>
 
-//constructors
-Pause::Pause() :
-	SequenceElement(),
-	ms_duration_(0)
+namespace osa_gui
+{
+namespace common
 {
 
-}
-
-//destructor
-Pause::~Pause()
+/**
+ * @brief This is the base class for SerialCommunication.
+ */
+class CommunicationLayer
 {
+protected:
+	/**
+	 * @brief Constructor.
+	 */
+	CommunicationLayer();
+	//CommunicationLayer(QString name);
+	//copy constructor
+	//CommunicationLayer(CommunicationLayer const& CommunicationLayer);
 
-}
+public:
+	/**
+	 * @brief Destructor.
+	 */
+	virtual ~CommunicationLayer();
 
-//setters
-int Pause::setMsDuration(uint32_t ms_duration)
-{
-	ms_duration_ = ms_duration;
+	//setters
+	int setName(QString name);
+	int setState(bool state);
 
-	return 0;
-}
+	//getters
+	QString getName() 	const { return name_; };
+	bool 	getState() 	const { return state_; };
 
-void Pause::playElement(rosnode::SequencerNode* sequencerNode)
-{
-	ROS_INFO("Pause::playElement : Apply a %d ms pause.", ms_duration_);
-	double sleep = (double)ms_duration_;
-	sleep /= 1000;
-	ros::Duration(sleep).sleep();
+	//other methods
+	virtual int openCommunication();
+	virtual int closeCommunication();
 
-	//sequencerNode->setPause(ms_duration_);
-	//))m_pause.setMsDuration(ms_duration_);
-}
+	virtual void display() = 0;
 
-void Pause::read(const QJsonObject &json)
-{
-	SequenceElement::read(json);
+	/** @brief Read method for JSON serialization. */
+	virtual void read(const QJsonObject &json) = 0;
 
-	ms_duration_ = (uint32_t)json["ms_duration"].toDouble();
-}
+	/** @brief Write method for JSON serialization. */
+	virtual void write(QJsonObject &json) const = 0;
 
-void Pause::write(QJsonObject &json) const
-{
-	SequenceElement::write(json);
+protected:
+	QString name_;
+	bool 	state_;
+};
 
-	json["ms_duration"] = (double)ms_duration_;
-}
+} // namespace common
+} // namespace osa_gui
+
+#endif // OSA_GUI_COMMON_COMMUNICATION_LAYER_H

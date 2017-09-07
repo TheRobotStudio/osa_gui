@@ -25,69 +25,68 @@
  */
 
 /**
- * @file Pause.cpp
+ * @file plot_node.h
  * @author Cyril Jourdan
- * @date Dec 12, 2016
+ * @date Feb 20, 2017
  * @version 0.0.1
- * @brief Implementation file for class Pause
+ * @brief Header file for the ROS class QNode
  *
  * Contact: cyril.jourdan@therobotstudio.com
- * Created on : Dec 12, 2016
+ * Created on : Feb 20, 2017
  */
 
-#include <pause.h>
+#ifndef OSA_GUI_ROSNODE_PLOT_NODE_H
+#define OSA_GUI_ROSNODE_PLOT_NODE_H
+
 #include <ros/ros.h>
-#include <QJsonArray>
-#include "robot_defines.h"
+#include <string>
+#include <QThread>
+#include <QStringListModel>
+#include <osa_msgs/MotorDataMultiArray.h>
 
-using namespace std;
-using namespace osa_gui;
-using namespace sequencer;
-using namespace Qt;
-
-//constructors
-Pause::Pause() :
-	SequenceElement(),
-	ms_duration_(0)
+namespace osa_gui
+{
+namespace rosnode
 {
 
-}
-
-//destructor
-Pause::~Pause()
+/**
+ * @brief This defines the plot ROS node.
+ */
+class PlotNode : public QThread
 {
+Q_OBJECT
 
-}
+public:
+	/** @brief Constructor. */
+	PlotNode();
 
-//setters
-int Pause::setMsDuration(uint32_t ms_duration)
-{
-	ms_duration_ = ms_duration;
+	/** @brief Destructor. */
+	virtual ~PlotNode();
 
-	return 0;
-}
+	/** @brief Initialize the ROS node. */
+	bool init();
 
-void Pause::playElement(rosnode::SequencerNode* sequencerNode)
-{
-	ROS_INFO("Pause::playElement : Apply a %d ms pause.", ms_duration_);
-	double sleep = (double)ms_duration_;
-	sleep /= 1000;
-	ros::Duration(sleep).sleep();
+	/** @brief Run the ROS node. */
+	void run();
 
-	//sequencerNode->setPause(ms_duration_);
-	//))m_pause.setMsDuration(ms_duration_);
-}
+	/** @brief Callback method for the motor data. */
+	void motorDataArrayCallback(const osa_msgs::MotorDataMultiArrayConstPtr &data);
 
-void Pause::read(const QJsonObject &json)
-{
-	SequenceElement::read(json);
+	//getters
+	osa_msgs::MotorDataMultiArray getMotorDataArray(); //access to private variables
 
-	ms_duration_ = (uint32_t)json["ms_duration"].toDouble();
-}
+Q_SIGNALS:
+	void motorDataReceived();
 
-void Pause::write(QJsonObject &json) const
-{
-	SequenceElement::write(json);
+	/** @brief Signal to shutdown the ROS node. */
+	void rosShutdown();
 
-	json["ms_duration"] = (double)ms_duration_;
-}
+private:
+	osa_msgs::MotorDataMultiArray motor_data_array_;
+	ros::Subscriber sub_motor_data_array_;
+};
+
+} // namespace rosnode
+} // namespace osa_gui
+
+#endif // OSA_GUI_ROSNODE_PLOT_NODE_H

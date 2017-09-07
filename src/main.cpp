@@ -28,28 +28,26 @@
  * @file main.cpp
  * @author Cyril Jourdan
  * @date Jan 21, 2017
- * @version 0.0.1
- * @brief main function for the Robot Conductor Qt GUI.
+ * @version 0.1.0
+ * @brief Main function for the Open Source Android Studio Qt GUI.
  *
  * Contact: cyril.jourdan@therobotstudio.com
  * Created on : Jan 21, 2017
  */
 
+#include <main_window.h>
 #include <QtGui>
 #include <QApplication>
-#include "MainWindow.hpp"
 
-/*! \fn int main(int argc, char **argv)
- *  \brief main function for the Open Source Android Studio Qt GUI.
- *
- *  This is the main function that creates the Window.
+/**
+ *  @brief Main function for the Open Source Android Studio Qt GUI.
  */
 int main(int argc, char **argv)
 {
     QApplication app(argc, argv);
 
-    osa_gui::gui::MainWindow mainWindow(argc,argv);
-    mainWindow.show();
+    osa_gui::gui::MainWindow main_window(argc,argv);
+    main_window.show();
 
     app.connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
     int result = app.exec();

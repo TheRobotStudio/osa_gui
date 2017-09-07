@@ -35,7 +35,7 @@
  * Created on : Dec 12, 2016
  */
 
-#include "SequencerThread.hpp"
+#include <sequencer_thread.h>
 
 using namespace std;
 using namespace osa_gui;
@@ -44,23 +44,23 @@ using namespace Qt;
 
 //constructors
 SequencerThread::SequencerThread(QObject * parent) :
-		QThread(parent),
-		m_pPosture(new Posture()),
-		m_pSequence(new Sequence()),
-		m_playPosture(false),
-		m_playSequence(false),
-		m_pSequencerNode(NULL)
+	QThread(parent),
+	ptr_posture_(new Posture()),
+	ptr_sequence_(new Sequence()),
+	play_posture_(false),
+	play_sequence_(false),
+	ptr_sequencer_node_(NULL)
 {
 	//Connect the node to ROS
-	//QObject::connect(m_pSequencerNode, &rosnode::SequencerNode::motorDataReceived, this, &SequencerGUI::updateLpJSONMotorDataMultiArray);
-	//QObject::connect(m_pSequencerNode, SIGNAL(rosShutdown()), this, SLOT(close()));
-	//m_pSequencerNode->init();
+	//QObject::connect(ptr_sequencer_node_, &rosnode::SequencerNode::motorDataReceived, this, &SequencerGUI::updateLpJSONMotorDataMultiArray);
+	//QObject::connect(ptr_sequencer_node_, SIGNAL(rosShutdown()), this, SLOT(close()));
+	//ptr_sequencer_node_->init();
 }
 
 //destructor
 SequencerThread::~SequencerThread()
 {
-	delete m_pSequence;
+	delete ptr_sequence_;
 
 	//quit();
 	//requestInterruption();
@@ -78,20 +78,20 @@ void SequencerThread::run() //TODO check the use of exec()
 
 	while(loop)
 	{
-		if(m_pSequencerNode != 0)
+		if(ptr_sequencer_node_ != 0)
 		{
-			if(m_playPosture)
+			if(play_posture_)
 			{
-				m_pPosture->playElement(m_pSequencerNode);
+				ptr_posture_->playElement(ptr_sequencer_node_);
 				//posture played
-				m_playPosture = false;
+				play_posture_ = false;
 			}
 
-			if(m_playSequence)
+			if(play_sequence_)
 			{
-				m_pSequence->playSequence(m_pSequencerNode);
+				ptr_sequence_->playSequence(ptr_sequencer_node_);
 				//sequence finished
-				m_playSequence = false;
+				play_sequence_ = false;
 			}
 		}
 	}
@@ -107,35 +107,35 @@ int SequencerThread::playSelectedPosture(Posture* pPosture)
 
 int SequencerThread::setPPosture(Posture* pPosture)
 {
-	m_pPosture = pPosture;
+	ptr_posture_ = pPosture;
 
 	return 0;
 }
 
 int SequencerThread::setPSequence(Sequence* pSequence)
 {
-	m_pSequence = pSequence;
+	ptr_sequence_ = pSequence;
 
 	return 0;
 }
 
 int SequencerThread::setPlayPosture(bool playPosture)
 {
-	m_playPosture = playPosture;
+	play_posture_ = playPosture;
 
 	return 0;
 }
 
 int SequencerThread::setPlaySequence(bool playSequence)
 {
-	m_playSequence = playSequence;
+	play_sequence_ = playSequence;
 
 	return 0;
 }
 
 int SequencerThread::setPSequencerNode(rosnode::SequencerNode* pSequencerNode)
 {
-	m_pSequencerNode = pSequencerNode;
+	ptr_sequencer_node_ = pSequencerNode;
 
 	return 0;
 }

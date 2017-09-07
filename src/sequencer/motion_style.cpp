@@ -25,18 +25,17 @@
  */
 
 /**
- * @file Pause.cpp
+ * @file motion_style.cpp
  * @author Cyril Jourdan
  * @date Dec 12, 2016
  * @version 0.0.1
- * @brief Implementation file for class Pause
+ * @brief Implementation file for class MotionStyle.
  *
  * Contact: cyril.jourdan@therobotstudio.com
  * Created on : Dec 12, 2016
  */
 
-#include <pause.h>
-#include <ros/ros.h>
+#include <motion_style.h>
 #include <QJsonArray>
 #include "robot_defines.h"
 
@@ -45,49 +44,78 @@ using namespace osa_gui;
 using namespace sequencer;
 using namespace Qt;
 
-//constructors
-Pause::Pause() :
+MotionStyle::MotionStyle() :
 	SequenceElement(),
-	ms_duration_(0)
+	mode_of_operation_(CURRENT_MODE),
+	profile_acceleration_(1000),
+	profile_deceleration_(1000),
+	profile_velocity_(850),
+	output_current_limit_(800)
 {
-
 }
 
-//destructor
-Pause::~Pause()
+MotionStyle::~MotionStyle()
 {
-
 }
 
-//setters
-int Pause::setMsDuration(uint32_t ms_duration)
+int MotionStyle::setModeOfOperation(int8_t mode_of_operation)
 {
-	ms_duration_ = ms_duration;
+	mode_of_operation_ = mode_of_operation;
 
 	return 0;
 }
 
-void Pause::playElement(rosnode::SequencerNode* sequencerNode)
+int MotionStyle::setProfileAcceleration(uint32_t profile_acceleration)
 {
-	ROS_INFO("Pause::playElement : Apply a %d ms pause.", ms_duration_);
-	double sleep = (double)ms_duration_;
-	sleep /= 1000;
-	ros::Duration(sleep).sleep();
+	profile_acceleration_ = profile_acceleration;
 
-	//sequencerNode->setPause(ms_duration_);
-	//))m_pause.setMsDuration(ms_duration_);
+	return 0;
 }
 
-void Pause::read(const QJsonObject &json)
+int MotionStyle::setProfileDeceleration(uint32_t profile_deceleration)
+{
+	profile_deceleration_ = profile_deceleration;
+
+	return 0;
+}
+
+int MotionStyle::setProfileVelocity(uint32_t profile_velocity)
+{
+	profile_velocity_ = profile_velocity;
+
+	return 0;
+}
+
+int MotionStyle::setOutputCurrentLimit(uint16_t output_current_limit)
+{
+	output_current_limit_ = output_current_limit;
+
+	return 0;
+}
+
+void MotionStyle::playElement(rosnode::SequencerNode* sequencerNode)
+{
+
+}
+
+void MotionStyle::read(const QJsonObject &json)
 {
 	SequenceElement::read(json);
 
-	ms_duration_ = (uint32_t)json["ms_duration"].toDouble();
+	mode_of_operation_ = (int8_t)json["mode_of_operation"].toDouble();
+	profile_acceleration_ = (uint32_t)json["profile_acceleration"].toDouble();
+	profile_deceleration_ = (uint32_t)json["profile_deceleration"].toDouble();
+	profile_velocity_ = (uint32_t)json["profile_velocity"].toDouble();
+	output_current_limit_ = (uint16_t)json["output_current_limit"].toDouble();
 }
 
-void Pause::write(QJsonObject &json) const
+void MotionStyle::write(QJsonObject &json) const
 {
 	SequenceElement::write(json);
 
-	json["ms_duration"] = (double)ms_duration_;
+	json["mode_of_operation"] = (double)mode_of_operation_;
+	json["profile_acceleration"] = (double)profile_acceleration_;
+	json["profile_deceleration"] = (double)profile_deceleration_;
+	json["profile_velocity"] = (double)profile_velocity_;
+	json["output_current_limit"] = (double)output_current_limit_;
 }

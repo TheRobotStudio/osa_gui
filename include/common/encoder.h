@@ -25,69 +25,77 @@
  */
 
 /**
- * @file Pause.cpp
+ * @file encoder.h
  * @author Cyril Jourdan
- * @date Dec 12, 2016
+ * @date Dec 9, 2016
  * @version 0.0.1
- * @brief Implementation file for class Pause
+ * @brief Header file for class Encoder
  *
  * Contact: cyril.jourdan@therobotstudio.com
- * Created on : Dec 12, 2016
+ * Created on : Dec 9, 2016
  */
 
-#include <pause.h>
-#include <ros/ros.h>
-#include <QJsonArray>
-#include "robot_defines.h"
+#ifndef OSA_GUI_COMMON_ENCODER_H
+#define OSA_GUI_COMMON_ENCODER_H
 
-using namespace std;
-using namespace osa_gui;
-using namespace sequencer;
-using namespace Qt;
+#include <QJsonObject>
+#include <string>
+#include "sensor.h"
+#include "motor.h"
 
-//constructors
-Pause::Pause() :
-	SequenceElement(),
-	ms_duration_(0)
+namespace osa_gui
+{
+namespace common
 {
 
-}
+// Forward declarations
+class Motor;
 
-//destructor
-Pause::~Pause()
+/**
+ * @brief Class representing a motor encoder.
+ */
+class Encoder : public Sensor
 {
+public:
+	/**
+	 * @brief Constructor.
+	 */
+	Encoder();
+	//Encoder(unsigned int countsPerTurn, unsigned short int numberOfChannels);
+	//copy constructor
+	//Encoder(Encoder const& encoder);
 
-}
+	/**
+	 * @brief Destructor.
+	 */
+	virtual ~Encoder();
 
-//setters
-int Pause::setMsDuration(uint32_t ms_duration)
-{
-	ms_duration_ = ms_duration;
+	//setters
+	int setCountsPerTurn(unsigned int counts_per_turn);
+	int setNumberOfChannels(unsigned short int number_of_channels);
+	//int	setPMotor(Motor* pMotor);
 
-	return 0;
-}
+	//getters
+	unsigned int getCountsPerTurn() const { return counts_per_turn_; };
+	unsigned short int getNumberOfChannels() const { return number_of_channels_; };
+	//Motor* 				getPMotor() 			const { return m_pMotor; };
 
-void Pause::playElement(rosnode::SequencerNode* sequencerNode)
-{
-	ROS_INFO("Pause::playElement : Apply a %d ms pause.", ms_duration_);
-	double sleep = (double)ms_duration_;
-	sleep /= 1000;
-	ros::Duration(sleep).sleep();
+	//other methods
+	virtual void display();
 
-	//sequencerNode->setPause(ms_duration_);
-	//))m_pause.setMsDuration(ms_duration_);
-}
+	/** @brief Read method for JSON serialization. */
+	virtual void read(const QJsonObject &json);
 
-void Pause::read(const QJsonObject &json)
-{
-	SequenceElement::read(json);
+	/** @brief Write method for JSON serialization. */
+	virtual void write(QJsonObject &json) const;
 
-	ms_duration_ = (uint32_t)json["ms_duration"].toDouble();
-}
+private:
+	unsigned int counts_per_turn_;
+	unsigned short int number_of_channels_;
+	//Motor* m_pMotor; //motor reference
+};
 
-void Pause::write(QJsonObject &json) const
-{
-	SequenceElement::write(json);
+} // namespace common
+} // namespace osa_gui
 
-	json["ms_duration"] = (double)ms_duration_;
-}
+#endif // OSA_GUI_COMMON_ENCODER_H

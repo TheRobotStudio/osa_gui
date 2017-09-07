@@ -25,69 +25,53 @@
  */
 
 /**
- * @file Pause.cpp
+ * @file sequence_element.h
  * @author Cyril Jourdan
- * @date Dec 12, 2016
- * @version 0.0.1
- * @brief Implementation file for class Pause
+ * @date Mar 28, 2017
+ * @version 0.1.0
+ * @brief Header file for abstract class SequenceElement
  *
  * Contact: cyril.jourdan@therobotstudio.com
- * Created on : Dec 12, 2016
+ * Created on : Mar 28, 2016
  */
 
-#include <pause.h>
-#include <ros/ros.h>
-#include <QJsonArray>
-#include "robot_defines.h"
+#ifndef OSA_GUI_SEQUENCER_SEQUENCEELEMENT_H
+#define OSA_GUI_SEQUENCER_SEQUENCEELEMENT_H
 
-using namespace std;
-using namespace osa_gui;
-using namespace sequencer;
-using namespace Qt;
+#include <sequencer_node.h>
+#include <QJsonObject>
+#include <stdint.h>
 
-//constructors
-Pause::Pause() :
-	SequenceElement(),
-	ms_duration_(0)
+namespace osa_gui
+{
+namespace sequencer
 {
 
-}
-
-//destructor
-Pause::~Pause()
+/**
+*  @brief Abstract class representing a sequence element for the sequencer.
+*
+*  Base class for all sequence element like Posture, MotionStyle, Pause, Condition...
+*/
+class SequenceElement
 {
+//methods
+public:
+	/** @brief Constructor. */
+	SequenceElement();
 
-}
+	/** @brief Destructor. */
+	virtual ~SequenceElement();
 
-//setters
-int Pause::setMsDuration(uint32_t ms_duration)
-{
-	ms_duration_ = ms_duration;
+	virtual void playElement(rosnode::SequencerNode* sequencerNode) = 0;
 
-	return 0;
-}
+	/** @brief Read method for JSON serialization. */
+	virtual void read(const QJsonObject &json) = 0;
 
-void Pause::playElement(rosnode::SequencerNode* sequencerNode)
-{
-	ROS_INFO("Pause::playElement : Apply a %d ms pause.", ms_duration_);
-	double sleep = (double)ms_duration_;
-	sleep /= 1000;
-	ros::Duration(sleep).sleep();
+	/** @brief Write method for JSON serialization. */
+	virtual void write(QJsonObject &json)  const = 0;
+};
 
-	//sequencerNode->setPause(ms_duration_);
-	//))m_pause.setMsDuration(ms_duration_);
-}
+} // namespace sequencer
+} // namespace osa_gui
 
-void Pause::read(const QJsonObject &json)
-{
-	SequenceElement::read(json);
-
-	ms_duration_ = (uint32_t)json["ms_duration"].toDouble();
-}
-
-void Pause::write(QJsonObject &json) const
-{
-	SequenceElement::write(json);
-
-	json["ms_duration"] = (double)ms_duration_;
-}
+#endif // OSA_GUI_SEQUENCER_SEQUENCEELEMENT_H

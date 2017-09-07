@@ -25,18 +25,17 @@
  */
 
 /**
- * @file Pause.cpp
+ * @file condition.cpp
  * @author Cyril Jourdan
  * @date Dec 12, 2016
  * @version 0.0.1
- * @brief Implementation file for class Pause
+ * @brief Implementation file for class Condition
  *
  * Contact: cyril.jourdan@therobotstudio.com
  * Created on : Dec 12, 2016
  */
 
-#include <pause.h>
-#include <ros/ros.h>
+#include <condition.h>
 #include <QJsonArray>
 #include "robot_defines.h"
 
@@ -45,49 +44,26 @@ using namespace osa_gui;
 using namespace sequencer;
 using namespace Qt;
 
-//constructors
-Pause::Pause() :
-	SequenceElement(),
-	ms_duration_(0)
+Condition::Condition() :
+	SequenceElement()
+{
+}
+
+Condition::~Condition()
+{
+}
+
+void Condition::playElement(rosnode::SequencerNode* sequencerNode)
 {
 
 }
 
-//destructor
-Pause::~Pause()
-{
-
-}
-
-//setters
-int Pause::setMsDuration(uint32_t ms_duration)
-{
-	ms_duration_ = ms_duration;
-
-	return 0;
-}
-
-void Pause::playElement(rosnode::SequencerNode* sequencerNode)
-{
-	ROS_INFO("Pause::playElement : Apply a %d ms pause.", ms_duration_);
-	double sleep = (double)ms_duration_;
-	sleep /= 1000;
-	ros::Duration(sleep).sleep();
-
-	//sequencerNode->setPause(ms_duration_);
-	//))m_pause.setMsDuration(ms_duration_);
-}
-
-void Pause::read(const QJsonObject &json)
+void Condition::read(const QJsonObject &json)
 {
 	SequenceElement::read(json);
-
-	ms_duration_ = (uint32_t)json["ms_duration"].toDouble();
 }
 
-void Pause::write(QJsonObject &json) const
+void Condition::write(QJsonObject &json) const
 {
 	SequenceElement::write(json);
-
-	json["ms_duration"] = (double)ms_duration_;
 }

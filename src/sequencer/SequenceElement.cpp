@@ -35,20 +35,18 @@
  * Created on : Dec 12, 2016
  */
 
+#include <sequence_element.h>
 #include <QJsonArray>
-#include "SequenceElement.hpp"
 
 using namespace std;
 using namespace osa_gui;
 using namespace sequencer;
 using namespace Qt;
 
-//constructors
 SequenceElement::SequenceElement()
 {
 }
 
-//destructor
 SequenceElement::~SequenceElement()
 {
 

@@ -25,69 +25,72 @@
  */
 
 /**
- * @file Pause.cpp
+ * @file camera.cpp
  * @author Cyril Jourdan
- * @date Dec 12, 2016
- * @version 0.0.1
- * @brief Implementation file for class Pause
+ * @date Dec 13, 2016
+ * @version 0.1.0
+ * @brief Implementation file for class Camera
  *
  * Contact: cyril.jourdan@therobotstudio.com
- * Created on : Dec 12, 2016
+ * Created on : Dec 13, 2016
  */
 
-#include <pause.h>
-#include <ros/ros.h>
-#include <QJsonArray>
-#include "robot_defines.h"
+#include <iostream>
+#include "camera.h"
 
 using namespace std;
 using namespace osa_gui;
-using namespace sequencer;
+using namespace common;
 using namespace Qt;
 
-//constructors
-Pause::Pause() :
-	SequenceElement(),
-	ms_duration_(0)
+Camera::Camera() :
+	Sensor(),
+	USBDevice(),
+	type_(QString(""))
 {
-
 }
 
-//destructor
-Pause::~Pause()
+Camera::~Camera()
 {
-
 }
 
-//setters
-int Pause::setMsDuration(uint32_t ms_duration)
+int Camera::setType(QString type)
 {
-	ms_duration_ = ms_duration;
+	//check the value
+	if(!type.isEmpty())
+	{
+		type_ = type;
 
-	return 0;
+		return 0;
+	}
+	else
+		return -1;
 }
 
-void Pause::playElement(rosnode::SequencerNode* sequencerNode)
+void Camera::display()
 {
-	ROS_INFO("Pause::playElement : Apply a %d ms pause.", ms_duration_);
-	double sleep = (double)ms_duration_;
-	sleep /= 1000;
-	ros::Duration(sleep).sleep();
-
-	//sequencerNode->setPause(ms_duration_);
-	//))m_pause.setMsDuration(ms_duration_);
+	cout << endl << "Camera:" << endl;
+	Sensor::display(); //call mother class method
+	USBDevice::display(); //call mother class method
+	cout << "Type: " << type_.toStdString() << endl;
 }
 
-void Pause::read(const QJsonObject &json)
+void Camera::read(const QJsonObject &json)
 {
-	SequenceElement::read(json);
+	//call mother class method
+	Sensor::read(json);
+	USBDevice::read(json);
 
-	ms_duration_ = (uint32_t)json["ms_duration"].toDouble();
+	//write attributes
+	type_ = json["type"].toString();
 }
 
-void Pause::write(QJsonObject &json) const
+void Camera::write(QJsonObject &json) const
 {
-	SequenceElement::write(json);
+	//call mother class method
+	Sensor::write(json);
+	USBDevice::write(json);
 
-	json["ms_duration"] = (double)ms_duration_;
+	//write attributes
+    json["type"] = type_;
 }

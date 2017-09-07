@@ -25,69 +25,67 @@
  */
 
 /**
- * @file Pause.cpp
+ * @file json_motor_data.h
  * @author Cyril Jourdan
- * @date Dec 12, 2016
- * @version 0.0.1
- * @brief Implementation file for class Pause
+ * @date Mar 28, 2017
+ * @version 2.0.0
+ * @brief Header file for class JSONMotorData
  *
  * Contact: cyril.jourdan@therobotstudio.com
- * Created on : Dec 12, 2016
+ * Created on : Mar 28, 2016
  */
 
-#include <pause.h>
-#include <ros/ros.h>
-#include <QJsonArray>
-#include "robot_defines.h"
+#ifndef JSONMOTORDATA_H_
+#define JSONMOTORDATA_H_
 
-using namespace std;
-using namespace osa_gui;
-using namespace sequencer;
-using namespace Qt;
+#include <QJsonObject>
+#include <stdint.h>
 
-//constructors
-Pause::Pause() :
-	SequenceElement(),
-	ms_duration_(0)
+namespace osa_gui
+{
+namespace common
+{
+namespace osa_msgs_json
 {
 
-}
-
-//destructor
-Pause::~Pause()
+/**
+ * @brief This class represents the QJsonObject form of the MotorDataMultiArray ROS custom message.
+ * This allows serialization of the ROS message for purposes like saving in a file.
+ */
+class JSONMotorData
 {
+public:
+	/** @brief Constructor. */
+	JSONMotorData();
 
-}
+	/** @brief Destructor. */
+	~JSONMotorData();
 
-//setters
-int Pause::setMsDuration(uint32_t ms_duration)
-{
-	ms_duration_ = ms_duration;
+	int setPosition(int32_t position);
+	int setCurrent(int16_t current);
+	int setStatus(uint16_t status);
 
-	return 0;
-}
+	int32_t getPosition() const { return position_; };
+	int16_t getCurrent() const { return current_; };
+	uint16_t getStatus() const { return status_; };
 
-void Pause::playElement(rosnode::SequencerNode* sequencerNode)
-{
-	ROS_INFO("Pause::playElement : Apply a %d ms pause.", ms_duration_);
-	double sleep = (double)ms_duration_;
-	sleep /= 1000;
-	ros::Duration(sleep).sleep();
+	/** @brief Read method for JSON serialization. */
+	void read(const QJsonObject &json);
 
-	//sequencerNode->setPause(ms_duration_);
-	//))m_pause.setMsDuration(ms_duration_);
-}
+	/** @brief Write method for JSON serialization. */
+	void write(QJsonObject &json)  const;
 
-void Pause::read(const QJsonObject &json)
-{
-	SequenceElement::read(json);
+protected:
+	int32_t position_;
+	int32_t velocity_;
+	int16_t current_;
+	int16_t following_error_;
+	uint16_t status_;
+	int8_t mode_of_operation_;
+};
 
-	ms_duration_ = (uint32_t)json["ms_duration"].toDouble();
-}
+} // namespace osa_msgs_json
+} // namespace common
+} // namespace osa_gui
 
-void Pause::write(QJsonObject &json) const
-{
-	SequenceElement::write(json);
-
-	json["ms_duration"] = (double)ms_duration_;
-}
+#endif /* JSONMOTORDATA_H_ */

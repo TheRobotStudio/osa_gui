@@ -35,9 +35,9 @@
  * Created on : Dec 12, 2016
  */
 
+#include <posture.h>
 #include <QJsonArray>
-#include "Posture.hpp"
-#include "robotDefines.h"
+#include "robot_defines.h"
 
 using namespace std;
 using namespace osa_gui;
@@ -45,28 +45,24 @@ using namespace common::osa_msgs_json;
 using namespace sequencer;
 using namespace Qt;
 
-//constructors
 Posture::Posture() :
-		SequenceElement(),
-		m_pJSONMotorDataMultiArray(NULL)
-		//m_msPauseAfter()
+	SequenceElement(),
+	ptr_json_motor_data_array_(NULL)
+	//m_msPauseAfter()
 {
-
 }
 
-//destructor
 Posture::~Posture()
 {
-	delete m_pJSONMotorDataMultiArray;
+	delete ptr_json_motor_data_array_;
 }
 
-//setters
-int Posture::setPJSONMotorDataMultiArray(JSONMotorDataMultiArray* pJSONMotorDataMultiArray)
+int Posture::setJSONMotorDataArray(JSONMotorDataMultiArray* ptr_json_motor_data_array)
 {
 	//check the value
-	if(pJSONMotorDataMultiArray != 0)
+	if(ptr_json_motor_data_array != 0)
 	{
-		m_pJSONMotorDataMultiArray = pJSONMotorDataMultiArray;
+		ptr_json_motor_data_array_ = ptr_json_motor_data_array;
 
 		return 0;
 	}
@@ -78,36 +74,36 @@ void Posture::playElement(rosnode::SequencerNode* sequencerNode)
 {
 	ROS_INFO("Posture::playElement : Apply a posture.");
 
-	osa_msgs::MotorCmdMultiArray motorCmd_ma;// = new osa_msgs::MotorCmdMultiArray();
+	osa_msgs::MotorCmdMultiArray motor_cmd_array;// = new osa_msgs::MotorCmdMultiArray();
 
 	//create the commands multi array
-	motorCmd_ma.layout.dim.push_back(std_msgs::MultiArrayDimension());
-	motorCmd_ma.layout.dim[0].size = NUMBER_SLAVE_BOARDS;
-	motorCmd_ma.layout.dim[0].stride = NUMBER_SLAVE_BOARDS*NUMBER_MAX_EPOS2_PER_SLAVE;
-	motorCmd_ma.layout.dim[0].label = "slaves";
+	motor_cmd_array.layout.dim.push_back(std_msgs::MultiArrayDimension());
+	motor_cmd_array.layout.dim[0].size = NUMBER_SLAVE_BOARDS;
+	motor_cmd_array.layout.dim[0].stride = NUMBER_SLAVE_BOARDS*NUMBER_MAX_EPOS2_PER_SLAVE;
+	motor_cmd_array.layout.dim[0].label = "slaves";
 
-	motorCmd_ma.layout.dim.push_back(std_msgs::MultiArrayDimension());
-	motorCmd_ma.layout.dim[1].size = NUMBER_MAX_EPOS2_PER_SLAVE;
-	motorCmd_ma.layout.dim[1].stride = NUMBER_MAX_EPOS2_PER_SLAVE;
-	motorCmd_ma.layout.dim[1].label = "motors";
+	motor_cmd_array.layout.dim.push_back(std_msgs::MultiArrayDimension());
+	motor_cmd_array.layout.dim[1].size = NUMBER_MAX_EPOS2_PER_SLAVE;
+	motor_cmd_array.layout.dim[1].stride = NUMBER_MAX_EPOS2_PER_SLAVE;
+	motor_cmd_array.layout.dim[1].label = "motors";
 
-	motorCmd_ma.layout.data_offset = 0;
+	motor_cmd_array.layout.data_offset = 0;
 
-	motorCmd_ma.motorCmd.clear();
-	motorCmd_ma.motorCmd.resize(NUMBER_SLAVE_BOARDS*NUMBER_MAX_EPOS2_PER_SLAVE);
+	motor_cmd_array.motor_cmd.clear();
+	motor_cmd_array.motor_cmd.resize(NUMBER_SLAVE_BOARDS*NUMBER_MAX_EPOS2_PER_SLAVE);
 
 	for(int i=0; i<NUMBER_SLAVE_BOARDS; i++)
 	{
 		for(int j=0; j<NUMBER_MAX_EPOS2_PER_SLAVE; j++)
 		{
-			motorCmd_ma.motorCmd[i*NUMBER_MAX_EPOS2_PER_SLAVE + j].slaveBoardID = i + 1;
-			motorCmd_ma.motorCmd[i*NUMBER_MAX_EPOS2_PER_SLAVE + j].nodeID = j + 1; //i*NUMBER_MAX_EPOS2_PER_SLAVE + j + 1;
-			motorCmd_ma.motorCmd[i*NUMBER_MAX_EPOS2_PER_SLAVE + j].command = SET_TARGET_POSITION;
-			motorCmd_ma.motorCmd[i*NUMBER_MAX_EPOS2_PER_SLAVE + j].value = m_pJSONMotorDataMultiArray->getLpJSONMotorData().at(i*NUMBER_MAX_EPOS2_PER_SLAVE + j)->getPosition();
+			//motor_cmd_array.motor_cmd[i*NUMBER_MAX_EPOS2_PER_SLAVE + j].slaveBoardID = i + 1;
+			motor_cmd_array.motor_cmd[i*NUMBER_MAX_EPOS2_PER_SLAVE + j].node_id = j + 1; //i*NUMBER_MAX_EPOS2_PER_SLAVE + j + 1;
+			motor_cmd_array.motor_cmd[i*NUMBER_MAX_EPOS2_PER_SLAVE + j].command = SET_TARGET_POSITION;
+			motor_cmd_array.motor_cmd[i*NUMBER_MAX_EPOS2_PER_SLAVE + j].value = ptr_json_motor_data_array_->getJSONMotorDataList().at(i*NUMBER_MAX_EPOS2_PER_SLAVE + j)->getPosition();
 		}
 	}
 
-	sequencerNode->setMotorCmd_ma(motorCmd_ma);
+	sequencerNode->setMotorCmdArray(motor_cmd_array);
 
 /*//this is done through the command builder
 	//pause
@@ -118,14 +114,14 @@ void Posture::playElement(rosnode::SequencerNode* sequencerNode)
 	{
 		for(int j=0; j<NUMBER_MAX_EPOS2_PER_SLAVE; j++)
 		{
-			motorCmd_ma.motorCmd[i*NUMBER_MAX_EPOS2_PER_SLAVE + j].slaveBoardID = i + 1;
-			motorCmd_ma.motorCmd[i*NUMBER_MAX_EPOS2_PER_SLAVE + j].nodeID = j + 1; //i*NUMBER_MAX_EPOS2_PER_SLAVE + j + 1;
-			motorCmd_ma.motorCmd[i*NUMBER_MAX_EPOS2_PER_SLAVE + j].command = SET_CONTROLWORD;
-			motorCmd_ma.motorCmd[i*NUMBER_MAX_EPOS2_PER_SLAVE + j].value = 0x002F; //63;
+			motor_cmd_array.motor_cmd[i*NUMBER_MAX_EPOS2_PER_SLAVE + j].slaveBoardID = i + 1;
+			motor_cmd_array.motor_cmd[i*NUMBER_MAX_EPOS2_PER_SLAVE + j].nodeID = j + 1; //i*NUMBER_MAX_EPOS2_PER_SLAVE + j + 1;
+			motor_cmd_array.motor_cmd[i*NUMBER_MAX_EPOS2_PER_SLAVE + j].command = SET_CONTROLWORD;
+			motor_cmd_array.motor_cmd[i*NUMBER_MAX_EPOS2_PER_SLAVE + j].value = 0x002F; //63;
 		}
 	}
 
-	sequencerNode->setMotorCmd_ma(motorCmd_ma);
+	sequencerNode->setMotorCmd_ma(motor_cmd_array);
 
 	ros::Duration(0.1).sleep();
 
@@ -133,25 +129,25 @@ void Posture::playElement(rosnode::SequencerNode* sequencerNode)
 	{
 		for(int j=0; j<NUMBER_MAX_EPOS2_PER_SLAVE; j++)
 		{
-			motorCmd_ma.motorCmd[i*NUMBER_MAX_EPOS2_PER_SLAVE + j].slaveBoardID = i + 1;
-			motorCmd_ma.motorCmd[i*NUMBER_MAX_EPOS2_PER_SLAVE + j].nodeID = j + 1; //i*NUMBER_MAX_EPOS2_PER_SLAVE + j + 1;
-			motorCmd_ma.motorCmd[i*NUMBER_MAX_EPOS2_PER_SLAVE + j].command = SET_CONTROLWORD;
-			motorCmd_ma.motorCmd[i*NUMBER_MAX_EPOS2_PER_SLAVE + j].value = 0x003F; //63;
+			motor_cmd_array.motor_cmd[i*NUMBER_MAX_EPOS2_PER_SLAVE + j].slaveBoardID = i + 1;
+			motor_cmd_array.motor_cmd[i*NUMBER_MAX_EPOS2_PER_SLAVE + j].nodeID = j + 1; //i*NUMBER_MAX_EPOS2_PER_SLAVE + j + 1;
+			motor_cmd_array.motor_cmd[i*NUMBER_MAX_EPOS2_PER_SLAVE + j].command = SET_CONTROLWORD;
+			motor_cmd_array.motor_cmd[i*NUMBER_MAX_EPOS2_PER_SLAVE + j].value = 0x003F; //63;
 		}
 	}
 
-	sequencerNode->setMotorCmd_ma(motorCmd_ma);
+	sequencerNode->setMotorCmd_ma(motor_cmd_array);
 */
 }
 
 void Posture::read(const QJsonObject &json)
 {
 	SequenceElement::read(json);
-	m_pJSONMotorDataMultiArray->read(json);
+	ptr_json_motor_data_array_->read(json);
 }
 
 void Posture::write(QJsonObject &json) const
 {
 	SequenceElement::write(json);
-	m_pJSONMotorDataMultiArray->write(json);
+	ptr_json_motor_data_array_->write(json);
 }

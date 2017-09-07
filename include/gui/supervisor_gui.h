@@ -25,69 +25,50 @@
  */
 
 /**
- * @file Pause.cpp
+ * @file supervisor_gui.h
  * @author Cyril Jourdan
- * @date Dec 12, 2016
- * @version 0.0.1
- * @brief Implementation file for class Pause
+ * @date Feb 20, 2017
+ * @version OSA 2.0.0
+ * @brief Header file for Qt based gui class SupervisorGUI.
  *
  * Contact: cyril.jourdan@therobotstudio.com
- * Created on : Dec 12, 2016
+ * Created on : Feb 20, 2017
  */
 
-#include <pause.h>
-#include <ros/ros.h>
-#include <QJsonArray>
-#include "robot_defines.h"
+#ifndef OSA_GUI_GUI_SUPERVISOR_GUI_H
+#define OSA_GUI_GUI_SUPERVISOR_GUI_H
 
-using namespace std;
-using namespace osa_gui;
-using namespace sequencer;
-using namespace Qt;
+#include <QMdiSubWindow>
+#include "ui_SupervisorGUI.h"
 
-//constructors
-Pause::Pause() :
-	SequenceElement(),
-	ms_duration_(0)
+namespace osa_gui
+{
+namespace gui
 {
 
-}
-
-//destructor
-Pause::~Pause()
+/**
+ * @brief This defines the Qt GUI for the supervisor window.
+ */
+class SupervisorGUI : public QMdiSubWindow
 {
+Q_OBJECT
 
-}
+public:
+	/**
+	 * @brief Constructor.
+	 */
+	SupervisorGUI(QWidget *parent = 0);
 
-//setters
-int Pause::setMsDuration(uint32_t ms_duration)
-{
-	ms_duration_ = ms_duration;
+	/**
+	 * @brief Destructor.
+	 */
+	~SupervisorGUI();
 
-	return 0;
-}
+private:
+	Ui::SupervisorGUIClass ui_;
+};
 
-void Pause::playElement(rosnode::SequencerNode* sequencerNode)
-{
-	ROS_INFO("Pause::playElement : Apply a %d ms pause.", ms_duration_);
-	double sleep = (double)ms_duration_;
-	sleep /= 1000;
-	ros::Duration(sleep).sleep();
+} // namespace gui
+} // namespace osa_gui
 
-	//sequencerNode->setPause(ms_duration_);
-	//))m_pause.setMsDuration(ms_duration_);
-}
-
-void Pause::read(const QJsonObject &json)
-{
-	SequenceElement::read(json);
-
-	ms_duration_ = (uint32_t)json["ms_duration"].toDouble();
-}
-
-void Pause::write(QJsonObject &json) const
-{
-	SequenceElement::write(json);
-
-	json["ms_duration"] = (double)ms_duration_;
-}
+#endif // OSA_GUI_GUI_SUPERVISOR_GUI_H

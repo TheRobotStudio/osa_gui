@@ -25,69 +25,72 @@
  */
 
 /**
- * @file Pause.cpp
+ * @file project.h
  * @author Cyril Jourdan
- * @date Dec 12, 2016
+ * @date Dec 8, 2016
  * @version 0.0.1
- * @brief Implementation file for class Pause
+ * @brief Header file for class Project
  *
  * Contact: cyril.jourdan@therobotstudio.com
- * Created on : Dec 12, 2016
+ * Created on : Dec 8, 2016
  */
 
-#include <pause.h>
-#include <ros/ros.h>
-#include <QJsonArray>
-#include "robot_defines.h"
+#ifndef OSA_GUI_COMMON_COMMON_PROJECT_H
+#define OSA_GUI_COMMON_COMMON_PROJECT_H
 
-using namespace std;
-using namespace osa_gui;
-using namespace sequencer;
-using namespace Qt;
+#include <QFile>
+#include <QJsonObject>
+#include "robot.h"
+#include "../sequencer/posture.h"
+#include "../sequencer/sequence.h"
 
-//constructors
-Pause::Pause() :
-	SequenceElement(),
-	ms_duration_(0)
+namespace osa_gui
+{
+namespace common
 {
 
-}
-
-//destructor
-Pause::~Pause()
+/**
+ * @brief This class defines a project.
+ */
+class Project
 {
+public:
+	/**
+	 * @brief Constructor.
+	 */
+	Project();
 
-}
+	/**
+	 * @brief Destructor.
+	 */
+	~Project();
 
-//setters
-int Pause::setMsDuration(uint32_t ms_duration)
-{
-	ms_duration_ = ms_duration;
+	//setters
+	int setFile(QFile* ptr_file);
+	int setRobot(Robot* ptr_robot);
+	int setSequence(sequencer::Sequence* ptr_sequence);
+	int addPosture(sequencer::Posture* ptr_posture);
 
-	return 0;
-}
+	//getters
+	QFile* getPFile() const { return ptr_file_; };
+	Robot* getPRobot() const { return ptr_robot_; };
+	sequencer::Sequence* getPSequence() const { return ptr_sequence_; };
+	QList<sequencer::Posture*> getLpPosture() const { return posture_list_; };
 
-void Pause::playElement(rosnode::SequencerNode* sequencerNode)
-{
-	ROS_INFO("Pause::playElement : Apply a %d ms pause.", ms_duration_);
-	double sleep = (double)ms_duration_;
-	sleep /= 1000;
-	ros::Duration(sleep).sleep();
+	/** @brief Read method for JSON serialization. */
+	void read(const QJsonObject &json);
 
-	//sequencerNode->setPause(ms_duration_);
-	//))m_pause.setMsDuration(ms_duration_);
-}
+	/** @brief Write method for JSON serialization. */
+	void write(QJsonObject &json) const;
 
-void Pause::read(const QJsonObject &json)
-{
-	SequenceElement::read(json);
+protected:
+	QFile* ptr_file_;
+	Robot* ptr_robot_;
+	sequencer::Sequence* ptr_sequence_; //TODO have a QList of Sequences
+	QList<sequencer::Posture*> posture_list_;
+};
 
-	ms_duration_ = (uint32_t)json["ms_duration"].toDouble();
-}
+} // namespace common
+} // namespace osa_gui
 
-void Pause::write(QJsonObject &json) const
-{
-	SequenceElement::write(json);
-
-	json["ms_duration"] = (double)ms_duration_;
-}
+#endif // OSA_GUI_COMMON_COMMON_PROJECT_H

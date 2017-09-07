@@ -1,0 +1,18 @@
+<launch>
+	<!-- ros_canopen nodes -->
+	<node name="topic_to_socketcan_node" pkg="socketcan_bridge" type="topic_to_socketcan_node" output="screen" respawn="true">
+		<param name="can_device" type="string" value="can0" />
+	</node>
+	<node name="socketcan_to_topic_node" pkg="socketcan_bridge" type="socketcan_to_topic_node" output="screen" respawn="true">
+		<param name="can_device" type="string" value="can0" />
+	</node>
+
+	<!-- OSA - Open Source Android nodes -->
+	<include file="$(find osa_communication)/launch/osa_can_layer.launch"/>
+	<node name="osa_command_builder_node" pkg="osa_control" type="osa_command_builder" respawn="true"/>
+	<node name="osa_studio_node" pkg="osa_gui" type="osa_gui" respawn="true"/>
+
+	<!-- Joystick Input node -->
+	<!--node name="osa_joy_node" pkg="joy" type="joy_node" respawn="true"/-->
+</launch>
+

@@ -25,69 +25,80 @@
  */
 
 /**
- * @file Pause.cpp
+ * @file json_motor_data.cpp
  * @author Cyril Jourdan
- * @date Dec 12, 2016
- * @version 0.0.1
- * @brief Implementation file for class Pause
+ * @date Mar 28, 2017
+ * @version 0.1.0
+ * @brief Implementation file for class JSONMotorData
  *
  * Contact: cyril.jourdan@therobotstudio.com
- * Created on : Dec 12, 2016
+ * Created on : Mar 28, 2016
  */
 
-#include <pause.h>
-#include <ros/ros.h>
-#include <QJsonArray>
-#include "robot_defines.h"
+#include <iostream>
+#include <string>
+#include "json_motor_data.h"
 
 using namespace std;
 using namespace osa_gui;
-using namespace sequencer;
+using namespace common;
+using namespace osa_msgs_json;
 using namespace Qt;
 
-//constructors
-Pause::Pause() :
-	SequenceElement(),
-	ms_duration_(0)
+JSONMotorData::JSONMotorData() : position_(0), velocity_(0), current_(0), following_error_(0), status_(0), mode_of_operation_(0)
 {
-
 }
 
-//destructor
-Pause::~Pause()
+JSONMotorData::~JSONMotorData()
 {
-
 }
 
-//setters
-int Pause::setMsDuration(uint32_t ms_duration)
+
+int JSONMotorData::setPosition(int32_t position)
 {
-	ms_duration_ = ms_duration;
+	position_ = position;
 
 	return 0;
 }
 
-void Pause::playElement(rosnode::SequencerNode* sequencerNode)
+int JSONMotorData::setCurrent(int16_t current)
 {
-	ROS_INFO("Pause::playElement : Apply a %d ms pause.", ms_duration_);
-	double sleep = (double)ms_duration_;
-	sleep /= 1000;
-	ros::Duration(sleep).sleep();
+		current_ = current;
 
-	//sequencerNode->setPause(ms_duration_);
-	//))m_pause.setMsDuration(ms_duration_);
+		return 0;
 }
 
-void Pause::read(const QJsonObject &json)
+int JSONMotorData::setStatus(uint16_t status)
 {
-	SequenceElement::read(json);
+	//check the value
+	if(status >= 0)
+	{
+		status_ = status;
 
-	ms_duration_ = (uint32_t)json["ms_duration"].toDouble();
+		return 0;
+	}
+	else
+		return -1;
 }
 
-void Pause::write(QJsonObject &json) const
+void JSONMotorData::read(const QJsonObject &json)
 {
-	SequenceElement::write(json);
+	//read attributes
+	position_ = json["position"].toDouble();
+	velocity_ = json["velocity"].toDouble();
+	current_ = json["current"].toDouble();
+	following_error_ = json["following_error"].toDouble();
+	status_ = json["status"].toDouble();
+	mode_of_operation_ = json["mode_of_operation"].toDouble();
+}
 
-	json["ms_duration"] = (double)ms_duration_;
+void JSONMotorData::write(QJsonObject &json) const
+{
+	//write attributes
+    json["position"] = position_;
+    json["velocity"] = velocity_;
+	json["current"] = current_;
+	json["following_error"] = following_error_;
+	json["status"] = status_;
+	json["mode_of_operation"] = mode_of_operation_;
 }

@@ -25,69 +25,51 @@
  */
 
 /**
- * @file Pause.cpp
+ * @file condition.h
  * @author Cyril Jourdan
- * @date Dec 12, 2016
- * @version 0.0.1
- * @brief Implementation file for class Pause
+ * @date Mar 29, 2017
+ * @version 0.1.0
+ * @brief Header file for class Condition
  *
  * Contact: cyril.jourdan@therobotstudio.com
- * Created on : Dec 12, 2016
+ * Created on : Mar 29, 2016
  */
 
-#include <pause.h>
-#include <ros/ros.h>
-#include <QJsonArray>
-#include "robot_defines.h"
+#ifndef OSA_GUI_SEQUENCER_CONDITION_H
+#define OSA_GUI_SEQUENCER_CONDITION_H
 
-using namespace std;
-using namespace osa_gui;
-using namespace sequencer;
-using namespace Qt;
+#include <sequence_element.h>
+#include <QJsonObject>
 
-//constructors
-Pause::Pause() :
-	SequenceElement(),
-	ms_duration_(0)
+namespace osa_gui
+{
+namespace sequencer
 {
 
-}
-
-//destructor
-Pause::~Pause()
+/*! \class Condition
+*  \brief This class defines a condition in a motor command sequence.
+*
+*  This class is a child class of SequenceElement
+*/
+class Condition : public SequenceElement
 {
+public:
+	/** @brief Constructor. */
+	Condition();
 
-}
+	/** @brief Destructor. */
+	~Condition();
 
-//setters
-int Pause::setMsDuration(uint32_t ms_duration)
-{
-	ms_duration_ = ms_duration;
+	void playElement(rosnode::SequencerNode* sequencerNode);
 
-	return 0;
-}
+	/** @brief Read method for JSON serialization. */
+	void read(const QJsonObject &json);
 
-void Pause::playElement(rosnode::SequencerNode* sequencerNode)
-{
-	ROS_INFO("Pause::playElement : Apply a %d ms pause.", ms_duration_);
-	double sleep = (double)ms_duration_;
-	sleep /= 1000;
-	ros::Duration(sleep).sleep();
+	/** @brief Write method for JSON serialization. */
+	void write(QJsonObject &json)  const;
+};
 
-	//sequencerNode->setPause(ms_duration_);
-	//))m_pause.setMsDuration(ms_duration_);
-}
+} // namespace sequencer
+} // namespace osa_gui
 
-void Pause::read(const QJsonObject &json)
-{
-	SequenceElement::read(json);
-
-	ms_duration_ = (uint32_t)json["ms_duration"].toDouble();
-}
-
-void Pause::write(QJsonObject &json) const
-{
-	SequenceElement::write(json);
-
-	json["ms_duration"] = (double)ms_duration_;
-}
+#endif // OSA_GUI_SEQUENCER_CONDITION_H

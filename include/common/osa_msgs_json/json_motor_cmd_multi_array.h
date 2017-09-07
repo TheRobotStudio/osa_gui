@@ -25,69 +25,66 @@
  */
 
 /**
- * @file Pause.cpp
+ * @file json_motor_cmd_multi_array.h
  * @author Cyril Jourdan
- * @date Dec 12, 2016
- * @version 0.0.1
- * @brief Implementation file for class Pause
+ * @date Mar 28, 2017
+ * @version 2.0.0
+ * @brief Header file for class JSONMotorCmdMultiArray
  *
  * Contact: cyril.jourdan@therobotstudio.com
- * Created on : Dec 12, 2016
+ * Created on : Mar 28, 2016
  */
 
-#include <pause.h>
-#include <ros/ros.h>
-#include <QJsonArray>
-#include "robot_defines.h"
+#ifndef OSA_GUI_COMMON_OSA_MSGS_JSON_JSON_MOTOR_CMD_MULTI_ARRAY_H
+#define OSA_GUI_COMMON_OSA_MSGS_JSON_JSON_MOTOR_CMD_MULTI_ARRAY_H
 
-using namespace std;
-using namespace osa_gui;
-using namespace sequencer;
-using namespace Qt;
+#include <QString>
+#include <QJsonObject>
+#include <QList>
+#include "json_motor_cmd.h"
 
-//constructors
-Pause::Pause() :
-	SequenceElement(),
-	ms_duration_(0)
+namespace osa_gui
+{
+namespace common
+{
+namespace osa_msgs_json
 {
 
-}
-
-//destructor
-Pause::~Pause()
+/**
+ * @brief This class represents the QJsonObject form of the MotorCmdMultiArray ROS custom message.
+ * This allows serialization of the ROS message for purposes like saving in a file.
+ */
+class JSONMotorCmdMultiArray
 {
+public:
+	/**
+	 * @brief Constructor.
+	 */
+	JSONMotorCmdMultiArray();
 
-}
+	/**
+	 * @brief Destructor.
+	 */
+	~JSONMotorCmdMultiArray();
 
-//setters
-int Pause::setMsDuration(uint32_t ms_duration)
-{
-	ms_duration_ = ms_duration;
+	//setters
+	int addJSONMotorCmd(JSONMotorCmd* ptr_json_motor_cmd);
 
-	return 0;
-}
+	//getters
+	QList<JSONMotorCmd*> getJSONMotorCmdList() const { return json_motor_cmd_list_; };
 
-void Pause::playElement(rosnode::SequencerNode* sequencerNode)
-{
-	ROS_INFO("Pause::playElement : Apply a %d ms pause.", ms_duration_);
-	double sleep = (double)ms_duration_;
-	sleep /= 1000;
-	ros::Duration(sleep).sleep();
+	/** @brief Read method for JSON serialization. */
+	void read(const QJsonObject &json);
 
-	//sequencerNode->setPause(ms_duration_);
-	//))m_pause.setMsDuration(ms_duration_);
-}
+	/** @brief Write method for JSON serialization. */
+	void write(QJsonObject &json)  const;
 
-void Pause::read(const QJsonObject &json)
-{
-	SequenceElement::read(json);
+protected:
+	QList<JSONMotorCmd*> json_motor_cmd_list_;
+};
 
-	ms_duration_ = (uint32_t)json["ms_duration"].toDouble();
-}
+} // namespace osa_msgs_json
+} // namespace common
+} // namespace osa_gui
 
-void Pause::write(QJsonObject &json) const
-{
-	SequenceElement::write(json);
-
-	json["ms_duration"] = (double)ms_duration_;
-}
+#endif // OSA_GUI_COMMON_OSA_MSGS_JSON_JSON_MOTOR_CMD_MULTI_ARRAY_H

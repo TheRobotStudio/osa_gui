@@ -25,69 +25,64 @@
  */
 
 /**
- * @file Pause.cpp
+ * @file posture.h
  * @author Cyril Jourdan
- * @date Dec 12, 2016
- * @version 0.0.1
- * @brief Implementation file for class Pause
+ * @date Mar 29, 2017
+ * @version 0.1.0
+ * @brief Header file for class Posture
  *
  * Contact: cyril.jourdan@therobotstudio.com
- * Created on : Dec 12, 2016
+ * Created on : Mar 29, 2016
  */
 
+#ifndef OSA_GUI_SEQUENCER_POSTURE_H
+#define OSA_GUI_SEQUENCER_POSTURE_H
+
 #include <pause.h>
-#include <ros/ros.h>
-#include <QJsonArray>
-#include "robot_defines.h"
+#include <sequence_element.h>
+#include <QJsonObject>
+#include "json_motor_data_multi_array.h"
 
-using namespace std;
-using namespace osa_gui;
-using namespace sequencer;
-using namespace Qt;
-
-//constructors
-Pause::Pause() :
-	SequenceElement(),
-	ms_duration_(0)
+namespace osa_gui
+{
+namespace sequencer
 {
 
-}
-
-//destructor
-Pause::~Pause()
+/*! \class Posture
+*  \brief
+*
+*  This class is
+*/
+class Posture : public SequenceElement
 {
+public:
+	/** @brief Constructor. */
+	Posture();
 
-}
+	/** @brief Destructor. */
+	~Posture();
 
-//setters
-int Pause::setMsDuration(uint32_t ms_duration)
-{
-	ms_duration_ = ms_duration;
+	//setters
+	int setJSONMotorDataArray(common::osa_msgs_json::JSONMotorDataMultiArray* ptr_json_motor_data_array);
+	//int setMsPauseAfter(Pause m_msPauseAfter);
 
-	return 0;
-}
+	//getters
+	common::osa_msgs_json::JSONMotorDataMultiArray* getJSONMotorDataArray() const { return ptr_json_motor_data_array_; };
 
-void Pause::playElement(rosnode::SequencerNode* sequencerNode)
-{
-	ROS_INFO("Pause::playElement : Apply a %d ms pause.", ms_duration_);
-	double sleep = (double)ms_duration_;
-	sleep /= 1000;
-	ros::Duration(sleep).sleep();
+	void playElement(rosnode::SequencerNode* sequencerNode);
 
-	//sequencerNode->setPause(ms_duration_);
-	//))m_pause.setMsDuration(ms_duration_);
-}
+	/** @brief Read method for JSON serialization. */
+	void read(const QJsonObject &json);
 
-void Pause::read(const QJsonObject &json)
-{
-	SequenceElement::read(json);
+	/** @brief Write method for JSON serialization. */
+	void write(QJsonObject &json) const;
 
-	ms_duration_ = (uint32_t)json["ms_duration"].toDouble();
-}
+protected:
+	common::osa_msgs_json::JSONMotorDataMultiArray* ptr_json_motor_data_array_;
+	//Pause m_msPauseAfter;
+};
 
-void Pause::write(QJsonObject &json) const
-{
-	SequenceElement::write(json);
+} // namespace sequencer
+} // namespace osa_gui
 
-	json["ms_duration"] = (double)ms_duration_;
-}
+#endif // OSA_GUI_SEQUENCER_POSTURE_H

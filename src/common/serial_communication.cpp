@@ -25,69 +25,80 @@
  */
 
 /**
- * @file Pause.cpp
+ * @file serial_communication.cpp
  * @author Cyril Jourdan
- * @date Dec 12, 2016
+ * @date Dec 14, 2016
  * @version 0.0.1
- * @brief Implementation file for class Pause
+ * @brief Implementation file for class SerialCommunication
  *
  * Contact: cyril.jourdan@therobotstudio.com
- * Created on : Dec 12, 2016
+ * Created on : Dec 14, 2016
  */
 
-#include <pause.h>
-#include <ros/ros.h>
-#include <QJsonArray>
-#include "robot_defines.h"
+#include <iostream>
+#include "serial_communication.h"
 
 using namespace std;
 using namespace osa_gui;
-using namespace sequencer;
+using namespace common;
 using namespace Qt;
 
-//constructors
-Pause::Pause() :
-	SequenceElement(),
-	ms_duration_(0)
+SerialCommunication::SerialCommunication() :
+		CommunicationLayer(),
+		file_path_(QString(""))
 {
-
 }
 
-//destructor
-Pause::~Pause()
+SerialCommunication::~SerialCommunication()
 {
-
 }
 
-//setters
-int Pause::setMsDuration(uint32_t ms_duration)
+int SerialCommunication::setFilePath(QString file_path)
 {
-	ms_duration_ = ms_duration;
+	//check the value
+	if(!file_path.isEmpty())
+	{
+		file_path_ = file_path;
 
+		return 0;
+	}
+	else
+		return -1;
+}
+
+char* SerialCommunication::readChar()
+{
+	char* data=0;
+
+	return data;
+}
+
+int SerialCommunication::writeChar(char* data)
+{
 	return 0;
 }
 
-void Pause::playElement(rosnode::SequencerNode* sequencerNode)
+void SerialCommunication::display()
 {
-	ROS_INFO("Pause::playElement : Apply a %d ms pause.", ms_duration_);
-	double sleep = (double)ms_duration_;
-	sleep /= 1000;
-	ros::Duration(sleep).sleep();
-
-	//sequencerNode->setPause(ms_duration_);
-	//))m_pause.setMsDuration(ms_duration_);
+	cout << endl << "SerialCommunication: " << endl;
+	CommunicationLayer::display();
+	cout << "File path: " << file_path_.toStdString() << endl;
 }
 
-void Pause::read(const QJsonObject &json)
+void SerialCommunication::read(const QJsonObject &json)
 {
-	SequenceElement::read(json);
+	//call mother class method
+	CommunicationLayer::read(json);
 
-	ms_duration_ = (uint32_t)json["ms_duration"].toDouble();
+	//read attributes
+	file_path_ = json["file_path"].toString();
 }
 
-void Pause::write(QJsonObject &json) const
+void SerialCommunication::write(QJsonObject &json) const
 {
-	SequenceElement::write(json);
+	//call mother class method
+	CommunicationLayer::write(json);
 
-	json["ms_duration"] = (double)ms_duration_;
+	//write attributes
+    json["file_path"] = file_path_;
 }

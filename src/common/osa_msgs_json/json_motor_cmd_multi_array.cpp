@@ -25,69 +25,53 @@
  */
 
 /**
- * @file Pause.cpp
+ * @file json_motor_cmd_multi_array.cpp
  * @author Cyril Jourdan
  * @date Dec 12, 2016
- * @version 0.0.1
- * @brief Implementation file for class Pause
+ * @version 0.1.0
+ * @brief Implementation file for abstract class JSONMotorCmdMultiArray
  *
  * Contact: cyril.jourdan@therobotstudio.com
  * Created on : Dec 12, 2016
  */
 
-#include <pause.h>
-#include <ros/ros.h>
 #include <QJsonArray>
-#include "robot_defines.h"
+#include "json_motor_cmd_multi_array.h"
 
 using namespace std;
 using namespace osa_gui;
-using namespace sequencer;
+using namespace common;
+using namespace osa_msgs_json;
 using namespace Qt;
 
-//constructors
-Pause::Pause() :
-	SequenceElement(),
-	ms_duration_(0)
+JSONMotorCmdMultiArray::JSONMotorCmdMultiArray() :
+	json_motor_cmd_list_(QList<JSONMotorCmd*>())
+{
+}
+
+JSONMotorCmdMultiArray::~JSONMotorCmdMultiArray()
+{
+}
+
+int JSONMotorCmdMultiArray::addJSONMotorCmd(JSONMotorCmd *json_motor_cmd)
+{
+	//check the value
+	if(json_motor_cmd != 0)
+	{
+		json_motor_cmd_list_.append(json_motor_cmd);
+
+		return 0;
+	}
+	else
+		return -1;
+}
+
+void JSONMotorCmdMultiArray::read(const QJsonObject &json)
 {
 
 }
 
-//destructor
-Pause::~Pause()
+void JSONMotorCmdMultiArray::write(QJsonObject &json) const
 {
 
-}
-
-//setters
-int Pause::setMsDuration(uint32_t ms_duration)
-{
-	ms_duration_ = ms_duration;
-
-	return 0;
-}
-
-void Pause::playElement(rosnode::SequencerNode* sequencerNode)
-{
-	ROS_INFO("Pause::playElement : Apply a %d ms pause.", ms_duration_);
-	double sleep = (double)ms_duration_;
-	sleep /= 1000;
-	ros::Duration(sleep).sleep();
-
-	//sequencerNode->setPause(ms_duration_);
-	//))m_pause.setMsDuration(ms_duration_);
-}
-
-void Pause::read(const QJsonObject &json)
-{
-	SequenceElement::read(json);
-
-	ms_duration_ = (uint32_t)json["ms_duration"].toDouble();
-}
-
-void Pause::write(QJsonObject &json) const
-{
-	SequenceElement::write(json);
-
-	json["ms_duration"] = (double)ms_duration_;
 }
