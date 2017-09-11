@@ -400,15 +400,11 @@ int BasicControlNode::setEnablePublish(bool state)
 
 void BasicControlNode::resetMotorCmdMultiArray()
 {
-	for(int i=0; i<NUMBER_SLAVE_BOARDS; i++)
+	for(int i=0; i<number_epos_boards_; i++)
 	{
-		for(int j=0; j<NUMBER_MAX_EPOS2_PER_SLAVE; j++)
-		{
-			//motor_cmd_array_.motor_cmd[i*NUMBER_MAX_EPOS2_PER_SLAVE + j].slaveBoardID = i + 1;
-			motor_cmd_array_.motor_cmd[i*NUMBER_MAX_EPOS2_PER_SLAVE + j].node_id = j + 1; //i*NUMBER_MAX_EPOS2_PER_SLAVE + j + 1;
-			motor_cmd_array_.motor_cmd[i*NUMBER_MAX_EPOS2_PER_SLAVE + j].command = SEND_DUMB_MESSAGE;
-			motor_cmd_array_.motor_cmd[i*NUMBER_MAX_EPOS2_PER_SLAVE + j].value = 0;
-		}
+			motor_cmd_array_.motor_cmd[i].node_id = 0;
+			motor_cmd_array_.motor_cmd[i].command = SEND_DUMB_MESSAGE;
+			motor_cmd_array_.motor_cmd[i].value = 0;
 	}
 }
 
@@ -419,15 +415,20 @@ void BasicControlNode::setMotorCmdArray(osa_msgs::MotorCmdMultiArray motor_cmd_a
 }
 
 //Q_SLOTS
-void BasicControlNode::updateMotorCmd_ma(osa_msgs::MotorCmd motorCmd)
+void BasicControlNode::updateMotorCmdArray(osa_msgs::MotorCmd motorCmd)
 {
 	//TODO check if this line works
 	//motor_cmd_array_.motor_cmd[motorCmd.node_id -1] = motorCmd;
-	int index = motorCmd.node_id-1; //(motorCmd.slaveBoardID-1)*NUMBER_MAX_EPOS2_PER_SLAVE + motorCmd.node_id-1;
+	int index = dof_node_id_list_.indexOf(motorCmd.node_id);
 
-	//update one specific command based on the Slave ID and Node ID.
-	//motor_cmd_array_.motor_cmd[index].slaveBoardID = motorCmd.slaveBoardID;
-	motor_cmd_array_.motor_cmd[index].node_id = motorCmd.node_id;
-	motor_cmd_array_.motor_cmd[index].command = motorCmd.command;
-	motor_cmd_array_.motor_cmd[index].value = motorCmd.value;
+	if(index != -1) //TODO exception
+	{
+		motor_cmd_array_.motor_cmd[index].node_id = motorCmd.node_id;
+		motor_cmd_array_.motor_cmd[index].command = motorCmd.command;
+		motor_cmd_array_.motor_cmd[index].value = motorCmd.value;
+	}
+	else
+	{
+		ROS_WARN("No node_id %d found in the list!", motorCmd.node_id);
+	}
 }

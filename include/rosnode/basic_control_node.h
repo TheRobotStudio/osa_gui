@@ -102,7 +102,7 @@ Q_SIGNALS:
 
 public Q_SLOTS:
 	void setMotorCmdArray(osa_msgs::MotorCmdMultiArray motor_cmd_array);
-	void updateMotorCmd_ma(osa_msgs::MotorCmd motor_cmd);
+	void updateMotorCmdArray(osa_msgs::MotorCmd motor_cmd);
 
 private:
 	void resetMotorCmdMultiArray();

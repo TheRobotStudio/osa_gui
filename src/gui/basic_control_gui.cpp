@@ -570,7 +570,7 @@ int BasicControlGUI::addBasicControlGUIController(BasicControlGUIController* ptr
 		//Connect the ROS BasicControlNode and the basic_control_gui_controller to display data
 		QObject::connect(&basic_control_node_, &BasicControlNode::motorDataReceived, ptr_basic_control_gui_controller, &BasicControlGUIController::setMotorDataLabels);
 		//Connect the ROS BasicControlNode and the basic_control_gui_controller to send motor commands
-		QObject::connect(ptr_basic_control_gui_controller, &BasicControlGUIController::sendMotorCmd, &basic_control_node_, &BasicControlNode::updateMotorCmd_ma);
+		QObject::connect(ptr_basic_control_gui_controller, &BasicControlGUIController::sendMotorCmd, &basic_control_node_, &BasicControlNode::updateMotorCmdArray);
 
 		return 0;
 	}
