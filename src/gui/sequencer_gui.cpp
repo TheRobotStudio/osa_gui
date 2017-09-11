@@ -199,17 +199,14 @@ void SequencerGUI::on_pb_add_clicked()
 
 void SequencerGUI::on_pb_remove_clicked()
 {
-
 }
 
 void SequencerGUI::on_pb_motionStyle_clicked()
 {
-
 }
 
 void SequencerGUI::on_pb_pause_clicked()
 {
-
 	bool ok;
 	int duration = QInputDialog::getInt(this, tr("Duration in ms"), tr(""), 0, 0, 1000000, 1, &ok);
 

@@ -45,7 +45,7 @@ using namespace common;
 using namespace osa_msgs_json;
 using namespace Qt;
 
-JSONMotorData::JSONMotorData() : position_(0), velocity_(0), current_(0), following_error_(0), status_(0), mode_of_operation_(0)
+JSONMotorData::JSONMotorData() : node_id_(0), position_(0), velocity_(0), current_(0), following_error_(0), status_(0), mode_of_operation_(0)
 {
 }
 
@@ -53,6 +53,12 @@ JSONMotorData::~JSONMotorData()
 {
 }
 
+int JSONMotorData::setNodeID(int8_t node_id)
+{
+	node_id_ = node_id;
+
+	return 0;
+}
 
 int JSONMotorData::setPosition(int32_t position)
 {
@@ -84,6 +90,7 @@ int JSONMotorData::setStatus(uint16_t status)
 void JSONMotorData::read(const QJsonObject &json)
 {
 	//read attributes
+	node_id_ = json["node_id"].toDouble();
 	position_ = json["position"].toDouble();
 	velocity_ = json["velocity"].toDouble();
 	current_ = json["current"].toDouble();
@@ -95,6 +102,7 @@ void JSONMotorData::read(const QJsonObject &json)
 void JSONMotorData::write(QJsonObject &json) const
 {
 	//write attributes
+	json["node_id"] = node_id_;
     json["position"] = position_;
     json["velocity"] = velocity_;
 	json["current"] = current_;

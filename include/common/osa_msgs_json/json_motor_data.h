@@ -61,10 +61,12 @@ public:
 	/** @brief Destructor. */
 	~JSONMotorData();
 
+	int setNodeID(int8_t node_id);
 	int setPosition(int32_t position);
 	int setCurrent(int16_t current);
 	int setStatus(uint16_t status);
 
+	int8_t getNodeID() const { return node_id_; };
 	int32_t getPosition() const { return position_; };
 	int16_t getCurrent() const { return current_; };
 	uint16_t getStatus() const { return status_; };
@@ -76,6 +78,7 @@ public:
 	void write(QJsonObject &json)  const;
 
 protected:
+	int8_t node_id_;
 	int32_t position_;
 	int32_t velocity_;
 	int16_t current_;

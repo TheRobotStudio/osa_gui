@@ -28,7 +28,7 @@
  * @file sequencer_node.cpp
  * @author Cyril Jourdan
  * @date Mar 21, 2017
- * @version OSA 2.0.0
+ * @version OSA 0.1.0
  * @brief Implementation file for the ROS class SequencerNode.
  *
  * Contact: cyril.jourdan@therobotstudio.com
@@ -53,8 +53,8 @@ using namespace rosnode;
 
 /*! Implementation */
 SequencerNode::SequencerNode() :
-		enable_publish_(false),
-		pause_(0)
+	enable_publish_(false),
+	pause_(0)
 {
 }
 

@@ -78,29 +78,26 @@ void Posture::playElement(rosnode::SequencerNode* sequencerNode)
 
 	//create the commands multi array
 	motor_cmd_array.layout.dim.push_back(std_msgs::MultiArrayDimension());
-	motor_cmd_array.layout.dim[0].size = NUMBER_SLAVE_BOARDS;
-	motor_cmd_array.layout.dim[0].stride = NUMBER_SLAVE_BOARDS*NUMBER_MAX_EPOS2_PER_SLAVE;
-	motor_cmd_array.layout.dim[0].label = "slaves";
-
+	motor_cmd_array.layout.dim[0].size = 2; //NUMBER_SLAVE_BOARDS;
+	motor_cmd_array.layout.dim[0].stride = 2; //NUMBER_SLAVE_BOARDS*NUMBER_MAX_EPOS2_PER_SLAVE;
+	motor_cmd_array.layout.dim[0].label = "epos";
+/*
 	motor_cmd_array.layout.dim.push_back(std_msgs::MultiArrayDimension());
 	motor_cmd_array.layout.dim[1].size = NUMBER_MAX_EPOS2_PER_SLAVE;
 	motor_cmd_array.layout.dim[1].stride = NUMBER_MAX_EPOS2_PER_SLAVE;
 	motor_cmd_array.layout.dim[1].label = "motors";
-
+*/
 	motor_cmd_array.layout.data_offset = 0;
 
 	motor_cmd_array.motor_cmd.clear();
-	motor_cmd_array.motor_cmd.resize(NUMBER_SLAVE_BOARDS*NUMBER_MAX_EPOS2_PER_SLAVE);
+	motor_cmd_array.motor_cmd.resize(2); // NUMBER_SLAVE_BOARDS*NUMBER_MAX_EPOS2_PER_SLAVE);
 
-	for(int i=0; i<NUMBER_SLAVE_BOARDS; i++)
+	for(int i=0; i<2; i++)
 	{
-		for(int j=0; j<NUMBER_MAX_EPOS2_PER_SLAVE; j++)
-		{
-			//motor_cmd_array.motor_cmd[i*NUMBER_MAX_EPOS2_PER_SLAVE + j].slaveBoardID = i + 1;
-			motor_cmd_array.motor_cmd[i*NUMBER_MAX_EPOS2_PER_SLAVE + j].node_id = j + 1; //i*NUMBER_MAX_EPOS2_PER_SLAVE + j + 1;
-			motor_cmd_array.motor_cmd[i*NUMBER_MAX_EPOS2_PER_SLAVE + j].command = SET_TARGET_POSITION;
-			motor_cmd_array.motor_cmd[i*NUMBER_MAX_EPOS2_PER_SLAVE + j].value = ptr_json_motor_data_array_->getJSONMotorDataList().at(i*NUMBER_MAX_EPOS2_PER_SLAVE + j)->getPosition();
-		}
+		//motor_cmd_array.motor_cmd[i*NUMBER_MAX_EPOS2_PER_SLAVE + j].slaveBoardID = i + 1;
+		motor_cmd_array.motor_cmd[i].node_id = ptr_json_motor_data_array_->getJSONMotorDataList().at(i)->getNodeID(); //j + 1; //i*NUMBER_MAX_EPOS2_PER_SLAVE + j + 1;
+		motor_cmd_array.motor_cmd[i].command = SET_TARGET_POSITION;
+		motor_cmd_array.motor_cmd[i].value = ptr_json_motor_data_array_->getJSONMotorDataList().at(i)->getPosition();
 	}
 
 	sequencerNode->setMotorCmdArray(motor_cmd_array);
