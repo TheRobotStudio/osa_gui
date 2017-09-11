@@ -92,7 +92,7 @@ BasicControlGUIController::BasicControlGUIController(QWidget *parent, QString bo
 	ui_.sb_maxcur->setVisible(false);
 
 	//tune position
-	this->setGeometry(16, 28*node_id, 1670, 28);
+	//this->setGeometry(16, 28*node_id, 1670, 28);
 
 	controlword_ = 0b0000000000000000;
 }

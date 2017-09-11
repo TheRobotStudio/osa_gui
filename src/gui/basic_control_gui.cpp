@@ -231,6 +231,8 @@ BasicControlGUI::BasicControlGUI(QWidget *parent) :
 				QString::fromStdString(basic_control_node_.getDOFControllerList().at(i)),
 				basic_control_node_.getDOFNodeIDList().at(i),
 				QString::fromStdString(basic_control_node_.getDOFNameList().at(i))));
+
+		basic_control_gui_controller_list_.at(i)->setGeometry(16, 28*i, 1670, 28);
 	}
 
 /*
