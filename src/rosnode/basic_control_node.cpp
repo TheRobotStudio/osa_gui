@@ -303,19 +303,19 @@ bool BasicControlNode::init()
 
 	//create the commands multi array
 	motor_cmd_array_.layout.dim.push_back(std_msgs::MultiArrayDimension());
-	motor_cmd_array_.layout.dim[0].size = NUMBER_SLAVE_BOARDS;
-	motor_cmd_array_.layout.dim[0].stride = NUMBER_SLAVE_BOARDS*NUMBER_MAX_EPOS2_PER_SLAVE;
-	motor_cmd_array_.layout.dim[0].label = "slaves";
-
+	motor_cmd_array_.layout.dim[0].size = number_epos_boards_; //NUMBER_SLAVE_BOARDS;
+	motor_cmd_array_.layout.dim[0].stride = number_epos_boards_; //NUMBER_SLAVE_BOARDS*NUMBER_MAX_EPOS2_PER_SLAVE;
+	motor_cmd_array_.layout.dim[0].label = "epos";
+/*
 	motor_cmd_array_.layout.dim.push_back(std_msgs::MultiArrayDimension());
 	motor_cmd_array_.layout.dim[1].size = NUMBER_MAX_EPOS2_PER_SLAVE;
 	motor_cmd_array_.layout.dim[1].stride = NUMBER_MAX_EPOS2_PER_SLAVE;
 	motor_cmd_array_.layout.dim[1].label = "motors";
-
+*/
 	motor_cmd_array_.layout.data_offset = 0;
 
 	motor_cmd_array_.motor_cmd.clear();
-	motor_cmd_array_.motor_cmd.resize(NUMBER_SLAVE_BOARDS*NUMBER_MAX_EPOS2_PER_SLAVE);
+	motor_cmd_array_.motor_cmd.resize(number_epos_boards_); //NUMBER_SLAVE_BOARDS*NUMBER_MAX_EPOS2_PER_SLAVE);
 
 	resetMotorCmdMultiArray();
 
