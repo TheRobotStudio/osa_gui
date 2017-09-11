@@ -65,7 +65,7 @@ public:
 	/**
 	 * @brief Constructor.
 	 */
-	BasicControlGUIController(QWidget *parent = 0, QString board_type = "EPOS2", uint8_t node_id = 1, QString name = "Motor name");
+	BasicControlGUIController(QWidget *parent = 0, uint8_t dof_idx = 0, QString board_type = "EPOS2", uint8_t node_id = 1, QString name = "Motor name");
 
 	/**
 	 * @brief Destructor.
@@ -110,6 +110,7 @@ private:
 	Ui::BasicControlGUIControllerClass ui_;
 	osa_msgs::MotorCmd motor_cmd_;
 	uint16_t controlword_;
+	uint8_t dof_idx_;
 };
 
 } // namespace gui

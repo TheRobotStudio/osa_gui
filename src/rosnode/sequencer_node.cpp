@@ -92,19 +92,19 @@ bool SequencerNode::init()
 
 	//create the commands multi array
 	motor_cmd_array_.layout.dim.push_back(std_msgs::MultiArrayDimension());
-	motor_cmd_array_.layout.dim[0].size = NUMBER_SLAVE_BOARDS;
-	motor_cmd_array_.layout.dim[0].stride = NUMBER_SLAVE_BOARDS*NUMBER_MAX_EPOS2_PER_SLAVE;
-	motor_cmd_array_.layout.dim[0].label = "slaves";
-
+	motor_cmd_array_.layout.dim[0].size = 2; //NUMBER_SLAVE_BOARDS;
+	motor_cmd_array_.layout.dim[0].stride = 2; //NUMBER_SLAVE_BOARDS*NUMBER_MAX_EPOS2_PER_SLAVE;
+	motor_cmd_array_.layout.dim[0].label = "epos";
+/*
 	motor_cmd_array_.layout.dim.push_back(std_msgs::MultiArrayDimension());
 	motor_cmd_array_.layout.dim[1].size = NUMBER_MAX_EPOS2_PER_SLAVE;
 	motor_cmd_array_.layout.dim[1].stride = NUMBER_MAX_EPOS2_PER_SLAVE;
 	motor_cmd_array_.layout.dim[1].label = "motors";
-
+*/
 	motor_cmd_array_.layout.data_offset = 0;
 
 	motor_cmd_array_.motor_cmd.clear();
-	motor_cmd_array_.motor_cmd.resize(NUMBER_SLAVE_BOARDS*NUMBER_MAX_EPOS2_PER_SLAVE);
+	motor_cmd_array_.motor_cmd.resize(2); //NUMBER_SLAVE_BOARDS*NUMBER_MAX_EPOS2_PER_SLAVE);
 
 	resetMotorCmdMultiArray();
 
@@ -183,26 +183,21 @@ void SequencerNode::updateMotorCmdArray(osa_msgs::MotorCmdMultiArray motor_cmd_a
 	//TODO uncomment to enable the transmission
 	//this is comming from the Face tracking node which drives the Head, Slave Board 1
 
-	for(int j=0; j<NUMBER_MAX_EPOS2_PER_SLAVE; j++)
+	for(int i=0; i<2; i++)
 	{
-		//motor_cmd_array_.motor_cmd[j].slaveBoardID = i + 1;
-		//motor_cmd_array_.motor_cmd[j].node_id = j + 1; //i*NUMBER_MAX_EPOS2_PER_SLAVE + j + 1;
-		motor_cmd_array_.motor_cmd[j].command = motor_cmd_array.motor_cmd[j].command;
-		motor_cmd_array_.motor_cmd[j].value = motor_cmd_array.motor_cmd[j].value;
+		motor_cmd_array_.motor_cmd[i].node_id = motor_cmd_array.motor_cmd[i].node_id;
+		motor_cmd_array_.motor_cmd[i].command = motor_cmd_array.motor_cmd[i].command;
+		motor_cmd_array_.motor_cmd[i].value = motor_cmd_array.motor_cmd[i].value;
 	}
 
 }
 
 void SequencerNode::resetMotorCmdMultiArray()
 {
-	for(int i=0; i<NUMBER_SLAVE_BOARDS; i++)
+	for(int i=0; i<2; i++)
 	{
-		for(int j=0; j<NUMBER_MAX_EPOS2_PER_SLAVE; j++)
-		{
-			//motor_cmd_array_.motor_cmd[i*NUMBER_MAX_EPOS2_PER_SLAVE + j].slaveBoardID = i + 1;
-			motor_cmd_array_.motor_cmd[i*NUMBER_MAX_EPOS2_PER_SLAVE + j].node_id = j + 1; //i*NUMBER_MAX_EPOS2_PER_SLAVE + j + 1;
-			motor_cmd_array_.motor_cmd[i*NUMBER_MAX_EPOS2_PER_SLAVE + j].command = SEND_DUMB_MESSAGE;
-			motor_cmd_array_.motor_cmd[i*NUMBER_MAX_EPOS2_PER_SLAVE + j].value = 0;
-		}
+		motor_cmd_array_.motor_cmd[i].node_id = 0;
+		motor_cmd_array_.motor_cmd[i].command = SEND_DUMB_MESSAGE;
+		motor_cmd_array_.motor_cmd[i].value = 0;
 	}
 }

@@ -47,8 +47,9 @@ using namespace osa_gui;
 using namespace gui;
 using namespace Qt;
 
-BasicControlGUIController::BasicControlGUIController(QWidget *parent, QString board_type, uint8_t node_id, QString name) :
-	QMdiSubWindow(parent, Qt::FramelessWindowHint)
+BasicControlGUIController::BasicControlGUIController(QWidget *parent, uint8_t dof_idx, QString board_type, uint8_t node_id, QString name) :
+	QMdiSubWindow(parent, Qt::FramelessWindowHint),
+	dof_idx_(dof_idx)
 {
 	//TODO this->showFullScreen();
 	ui_.setupUi(this); // Calling this incidentally connects all ui's triggers to on_...() callbacks in this class.
@@ -504,7 +505,7 @@ void BasicControlGUIController::on_pb_faultReset_clicked()
 //void BasicControlGUIController::setMotorDataLabels(int32_t position, int16_t current, uint16_t status)
 void BasicControlGUIController::setMotorDataLabels(osa_msgs::MotorDataMultiArray data_ma)
 {
-	int index = motor_cmd_.node_id-1; //(motor_cmd_.slaveBoardID-1)*NUMBER_MAX_EPOS2_PER_SLAVE + motor_cmd_.node_id-1;
+	int index = dof_idx_; //motor_cmd_.node_id-1; //(motor_cmd_.slaveBoardID-1)*NUMBER_MAX_EPOS2_PER_SLAVE + motor_cmd_.node_id-1;
 
 	ui_.lbl_position->setText(QString::number(data_ma.motor_data[index].position));
 	ui_.lbl_current->setText(QString::number(data_ma.motor_data[index].current));

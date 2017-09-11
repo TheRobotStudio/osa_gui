@@ -70,25 +70,24 @@ SequencerGUI::SequencerGUI(QWidget *parent) :
 
 	//init motor data multi array
 	motor_data_array_.layout.dim.push_back(std_msgs::MultiArrayDimension());
-	motor_data_array_.layout.dim[0].size = NUMBER_SLAVE_BOARDS;
-	motor_data_array_.layout.dim[0].stride = NUMBER_SLAVE_BOARDS*NUMBER_MAX_EPOS2_PER_SLAVE;
-	motor_data_array_.layout.dim[0].label = "slaves";
+	motor_data_array_.layout.dim[0].size = 2;//NUMBER_SLAVE_BOARDS;
+	motor_data_array_.layout.dim[0].stride = 2; //NUMBER_SLAVE_BOARDS*NUMBER_MAX_EPOS2_PER_SLAVE;
+	motor_data_array_.layout.dim[0].label = "epos";
+/*
 	motor_data_array_.layout.dim.push_back(std_msgs::MultiArrayDimension());
 	motor_data_array_.layout.dim[1].size = NUMBER_MAX_EPOS2_PER_SLAVE;
 	motor_data_array_.layout.dim[1].stride = NUMBER_MAX_EPOS2_PER_SLAVE;
 	motor_data_array_.layout.dim[1].label = "motors";
+*/
 	motor_data_array_.layout.data_offset = 0;
 	motor_data_array_.motor_data.clear();
-	motor_data_array_.motor_data.resize(NUMBER_SLAVE_BOARDS*NUMBER_MAX_EPOS2_PER_SLAVE);
+	motor_data_array_.motor_data.resize(2); //NUMBER_SLAVE_BOARDS*NUMBER_MAX_EPOS2_PER_SLAVE);
 
-	for(int i=0; i<NUMBER_SLAVE_BOARDS; i++)
+	for(int i=0; i<2; i++)
 	{
-		for(int j=0; j<NUMBER_MAX_EPOS2_PER_SLAVE; j++)
-		{
-			motor_data_array_.motor_data[i*NUMBER_MAX_EPOS2_PER_SLAVE + j].position = 0;
-			motor_data_array_.motor_data[i*NUMBER_MAX_EPOS2_PER_SLAVE + j].current = 0;
-			motor_data_array_.motor_data[i*NUMBER_MAX_EPOS2_PER_SLAVE + j].status = 0;
-		}
+		motor_data_array_.motor_data[i].position = 0;
+		motor_data_array_.motor_data[i].current = 0;
+		motor_data_array_.motor_data[i].status = 0;
 	}
 
 	//Connect the node to ROS

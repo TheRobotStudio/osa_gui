@@ -59,19 +59,19 @@ BasicControlGUI::BasicControlGUI(QWidget *parent) :
 
 	//create the motor command array, it will be used to set the motor command array of the ROS node
 	motor_cmd_array_.layout.dim.push_back(std_msgs::MultiArrayDimension());
-	motor_cmd_array_.layout.dim[0].size = NUMBER_SLAVE_BOARDS;
-	motor_cmd_array_.layout.dim[0].stride = NUMBER_SLAVE_BOARDS*NUMBER_MAX_EPOS2_PER_SLAVE;
-	motor_cmd_array_.layout.dim[0].label = "slaves";
-
+	motor_cmd_array_.layout.dim[0].size = 2; //NUMBER_SLAVE_BOARDS;
+	motor_cmd_array_.layout.dim[0].stride = 2;//NUMBER_SLAVE_BOARDS*NUMBER_MAX_EPOS2_PER_SLAVE;
+	motor_cmd_array_.layout.dim[0].label = "epos";
+/*
 	motor_cmd_array_.layout.dim.push_back(std_msgs::MultiArrayDimension());
 	motor_cmd_array_.layout.dim[1].size = NUMBER_MAX_EPOS2_PER_SLAVE;
 	motor_cmd_array_.layout.dim[1].stride = NUMBER_MAX_EPOS2_PER_SLAVE;
 	motor_cmd_array_.layout.dim[1].label = "motors";
-
+*/
 	motor_cmd_array_.layout.data_offset = 0;
 
 	motor_cmd_array_.motor_cmd.clear();
-	motor_cmd_array_.motor_cmd.resize(NUMBER_SLAVE_BOARDS*NUMBER_MAX_EPOS2_PER_SLAVE);
+	motor_cmd_array_.motor_cmd.resize(2); //NUMBER_SLAVE_BOARDS*NUMBER_MAX_EPOS2_PER_SLAVE);
 
 	resetMotorCmdMultiArray();
 
@@ -228,6 +228,7 @@ BasicControlGUI::BasicControlGUI(QWidget *parent) :
 	for(int i=0; i<basic_control_node_.getNumberEPOSBoards(); i++)
 	{
 		addBasicControlGUIController(new BasicControlGUIController(ui_.sa_dof,
+				i,
 				QString::fromStdString(basic_control_node_.getDOFControllerList().at(i)),
 				basic_control_node_.getDOFNodeIDList().at(i),
 				QString::fromStdString(basic_control_node_.getDOFNameList().at(i))));
@@ -309,15 +310,11 @@ void BasicControlGUI::on_pb_sendRobotCurrentCmd_clicked()
 
 void BasicControlGUI::resetMotorCmdMultiArray()
 {
-	for(int i=0; i<NUMBER_SLAVE_BOARDS; i++)
+	for(int i=0; i<2; i++)
 	{
-		for(int j=0; j<NUMBER_MAX_EPOS2_PER_SLAVE; j++)
-		{
-			//motor_cmd_array_.motor_cmd[i*NUMBER_MAX_EPOS2_PER_SLAVE + j].slaveBoardID = i + 1;
-			motor_cmd_array_.motor_cmd[i*NUMBER_MAX_EPOS2_PER_SLAVE + j].node_id = j + 1; //i*NUMBER_MAX_EPOS2_PER_SLAVE + j + 1;
-			motor_cmd_array_.motor_cmd[i*NUMBER_MAX_EPOS2_PER_SLAVE + j].command = SEND_DUMB_MESSAGE;
-			motor_cmd_array_.motor_cmd[i*NUMBER_MAX_EPOS2_PER_SLAVE + j].value = 0;
-		}
+		motor_cmd_array_.motor_cmd[i].node_id = 0;
+		motor_cmd_array_.motor_cmd[i].command = SEND_DUMB_MESSAGE;
+		motor_cmd_array_.motor_cmd[i].value = 0;
 	}
 }
 
@@ -517,13 +514,11 @@ void BasicControlGUI::on_cb_mode_0_currentIndexChanged(int index)
 
 void BasicControlGUI::on_pb_send_0_clicked()
 {
-	for(int i=0; i<NUMBER_SLAVE_BOARDS; i++)
+	for(int i=0; i<2; i++)
 	{
-		for(int j=0; j<NUMBER_MAX_EPOS2_PER_SLAVE; j++)
-		{
-			motor_cmd_array_.motor_cmd[i*NUMBER_MAX_EPOS2_PER_SLAVE + j].command = SET_CONTROLWORD;
-			motor_cmd_array_.motor_cmd[i*NUMBER_MAX_EPOS2_PER_SLAVE + j].value = 63;
-		}
+		//TODO node id, not just array nb, as they can be anything now
+		motor_cmd_array_.motor_cmd[i].command = SET_CONTROLWORD;
+		motor_cmd_array_.motor_cmd[i].value = 63;
 	}
 
 	basic_control_node_.setMotorCmdArray(motor_cmd_array_);
@@ -531,13 +526,10 @@ void BasicControlGUI::on_pb_send_0_clicked()
 
 void BasicControlGUI::on_pb_stop_0_clicked()
 {
-	for(int i=0; i<NUMBER_SLAVE_BOARDS; i++)
+	for(int i=0; i<2; i++)
 	{
-		for(int j=0; j<NUMBER_MAX_EPOS2_PER_SLAVE; j++)
-		{
-			motor_cmd_array_.motor_cmd[i*NUMBER_MAX_EPOS2_PER_SLAVE + j].command = SET_CONTROLWORD;
-			motor_cmd_array_.motor_cmd[i*NUMBER_MAX_EPOS2_PER_SLAVE + j].value = 819;
-		}
+		motor_cmd_array_.motor_cmd[i].command = SET_CONTROLWORD;
+		motor_cmd_array_.motor_cmd[i].value = 819;
 	}
 
 	basic_control_node_.setMotorCmdArray(motor_cmd_array_);
