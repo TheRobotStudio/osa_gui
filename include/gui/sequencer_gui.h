@@ -74,8 +74,8 @@ public:
 	~SequencerGUI();
 
 	//setters
-	int addPPosture(sequencer::Posture* ptr_posture);
-	int setPSequencerThread(sequencer::SequencerThread* ptr_sequence_thread);
+	int addPosture(sequencer::Posture* ptr_posture);
+	int setSequencerThread(sequencer::SequencerThread* ptr_sequence_thread);
 
 	//getters
 	QList<sequencer::Posture*> getPostureList() const { return posture_list_; };
@@ -92,7 +92,7 @@ public Q_SLOTS:
 	void on_pb_pause_clicked();
 	void on_ch_enablePublish_stateChanged(int state);
 	void on_ch_enableFaceTracking_stateChanged(int state);
-	void updateLpJSONMotorDataMultiArray(osa_msgs::MotorDataMultiArray motor_data_array);
+	void updateJSONMotorDataMultiArray(osa_msgs::MotorDataMultiArray motor_data_array);
 
 Q_SIGNALS:
 	void sendMotorCmdMultiArray(osa_msgs::MotorCmdMultiArray motor_cmd_multi_array);

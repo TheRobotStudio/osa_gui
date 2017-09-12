@@ -85,13 +85,14 @@ SequencerGUI::SequencerGUI(QWidget *parent) :
 
 	for(int i=0; i<2; i++)
 	{
+		motor_data_array_.motor_data[i].node_id = 0;
 		motor_data_array_.motor_data[i].position = 0;
 		motor_data_array_.motor_data[i].current = 0;
 		motor_data_array_.motor_data[i].status = 0;
 	}
 
 	//Connect the node to ROS
-	QObject::connect(ptr_sequencer_node_, &rosnode::SequencerNode::motorDataReceived, this, &SequencerGUI::updateLpJSONMotorDataMultiArray);
+	QObject::connect(ptr_sequencer_node_, &rosnode::SequencerNode::motorDataReceived, this, &SequencerGUI::updateJSONMotorDataMultiArray);
 	//Link the Face Tracking node to the Sequencer node, so it transmit the head motor commands when it receives head coordinates
 	QObject::connect(ptr_face_tracking_node_, &rosnode::FaceTrackingNode::sendMotorCmd_ma, ptr_sequencer_node_, &rosnode::SequencerNode::updateMotorCmdArray);
 	//Connect for clean ROS shutdown
@@ -122,14 +123,14 @@ SequencerGUI::~SequencerGUI()
 	posture_list_.clear();
 }
 
-int SequencerGUI::addPPosture(sequencer::Posture* ptr_posture)
+int SequencerGUI::addPosture(sequencer::Posture* ptr_posture)
 {
 	posture_list_.append(ptr_posture);
 
 	return 0;
 }
 
-int SequencerGUI::setPSequencerThread(sequencer::SequencerThread *sequencerThread)
+int SequencerGUI::setSequencerThread(sequencer::SequencerThread *sequencerThread)
 {
 	ptr_sequencer_thread_ = sequencerThread;
 
@@ -158,6 +159,7 @@ void SequencerGUI::on_pb_record_clicked()
 		common::osa_msgs_json::JSONMotorData *ptr_json_motor_data = new common::osa_msgs_json::JSONMotorData();
 
 		//int test = (ptr_sequencer_node_->getMotorDataArray()).motor_data[i].position;
+		ptr_json_motor_data->setNodeID((ptr_sequencer_node_->getMotorDataArray()).motor_data[i].node_id);
 		ptr_json_motor_data->setPosition((ptr_sequencer_node_->getMotorDataArray()).motor_data[i].position);
 		ptr_json_motor_data->setCurrent((ptr_sequencer_node_->getMotorDataArray()).motor_data[i].current);
 		ptr_json_motor_data->setStatus((ptr_sequencer_node_->getMotorDataArray()).motor_data[i].status);
@@ -166,7 +168,7 @@ void SequencerGUI::on_pb_record_clicked()
 
 	sequencer::Posture *ptr_posture = new sequencer::Posture();
 	ptr_posture->setJSONMotorDataArray(pJSONMotorDataMultiArray);
-	addPPosture(ptr_posture);
+	addPosture(ptr_posture);
 }
 
 void SequencerGUI::on_pb_playPosture_clicked()
@@ -245,10 +247,12 @@ void SequencerGUI::on_ch_enableFaceTracking_stateChanged(int state)
 	}
 }
 
-void SequencerGUI::updateLpJSONMotorDataMultiArray(osa_msgs::MotorDataMultiArray motorData_ma)
+void SequencerGUI::updateJSONMotorDataMultiArray(osa_msgs::MotorDataMultiArray motorData_ma)
 {
 	for(int i=0; i<motorData_ma.layout.dim[0].stride ; i++)
 	{
+		//TODO does copy directly like motor_data_array_.motor_data[i] = motorData_ma.motor_data[i]; works ?
+		motor_data_array_.motor_data[i].node_id = motorData_ma.motor_data[i].node_id;
 		motor_data_array_.motor_data[i].position = motorData_ma.motor_data[i].position;
 		motor_data_array_.motor_data[i].current = motorData_ma.motor_data[i].current;
 		motor_data_array_.motor_data[i].status = motorData_ma.motor_data[i].status;
