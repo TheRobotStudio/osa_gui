@@ -57,7 +57,7 @@ class Posture : public SequenceElement
 {
 public:
 	/** @brief Constructor. */
-	Posture();
+	Posture(int number_epos_boards);
 
 	/** @brief Destructor. */
 	~Posture();
@@ -67,6 +67,7 @@ public:
 	//int setMsPauseAfter(Pause m_msPauseAfter);
 
 	//getters
+	int getNumberEPOSBoards() const { return number_epos_boards_; };
 	common::osa_msgs_json::JSONMotorDataMultiArray* getJSONMotorDataArray() const { return ptr_json_motor_data_array_; };
 
 	void playElement(rosnode::SequencerNode* sequencerNode);
@@ -78,6 +79,7 @@ public:
 	void write(QJsonObject &json) const;
 
 protected:
+	int number_epos_boards_;
 	common::osa_msgs_json::JSONMotorDataMultiArray* ptr_json_motor_data_array_;
 	//Pause m_msPauseAfter;
 };

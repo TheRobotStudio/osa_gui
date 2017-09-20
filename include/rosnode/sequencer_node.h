@@ -75,6 +75,19 @@ public:
 	/** @brief Callback method for the motor data. */
 	void motorDataArrayCallback(const osa_msgs::MotorDataMultiArrayConstPtr &data);
 
+	//getters
+	std::string getRobotName() const { return robot_name_; };
+	std::string getRobotCANDevice() const { return robot_can_device_; };
+	int getNumberEPOSBoards() const { return number_epos_boards_; };
+	QList<std::string> getDOFNameList() const { return dof_name_list_; };
+	QList<std::string> getDOFTypeList() const { return dof_type_list_; };
+	QList<int> getDOFNodeIDList() const { return dof_node_id_list_; };
+	QList<std::string> getDOFControllerList() const { return dof_controller_list_; };
+	QList<std::string> getDOFMotorList() const { return dof_motor_list_; };
+	QList<bool> getDOFInvertedList() const { return dof_inverted_list_; };
+	QList<std::string> getDOFModeList() const { return dof_mode_list_; };
+	QList<int> getDOFValueList() const { return dof_value_list_; };
+
 	//setters
 	int setMotorCmdArray(osa_msgs::MotorCmdMultiArray motor_cmd_array);
 	int setEnablePublish(bool state);
@@ -103,6 +116,21 @@ private:
 	void resetMotorCmdMultiArray();
 
 private:
+	/**< ros parameters*/
+	std::string robot_name_;
+	std::string robot_can_device_;
+	int number_epos_boards_;
+
+	/**< TODO DRY Move this in a class */
+	QList<std::string> dof_name_list_;
+	QList<std::string> dof_type_list_;
+	QList<int> dof_node_id_list_;
+	QList<std::string> dof_controller_list_;
+	QList<std::string> dof_motor_list_;
+	QList<bool> dof_inverted_list_;
+	QList<std::string> dof_mode_list_;
+	QList<int> dof_value_list_;
+
 	osa_msgs::MotorDataMultiArray motor_data_array_;
 	osa_msgs::MotorCmdMultiArray motor_cmd_array_;
 	ros::Publisher pub_motor_cmd_array_;

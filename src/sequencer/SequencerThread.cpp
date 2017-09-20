@@ -45,7 +45,7 @@ using namespace Qt;
 //constructors
 SequencerThread::SequencerThread(QObject * parent) :
 	QThread(parent),
-	ptr_posture_(new Posture()),
+	ptr_posture_(new Posture(0)),
 	ptr_sequence_(new Sequence()),
 	play_posture_(false),
 	play_sequence_(false),

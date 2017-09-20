@@ -492,10 +492,10 @@ void MainWindow::on_actionNewProject_triggered()
 		ptr_robot_->setBrand("The Robot Studio");
 		ptr_robot_->setName("Open Source Android");
 		ptr_robot_->setPartNumber(1);
-		ptr_robot_->setVersion("2.0.0");
+		ptr_robot_->setVersion("0.1.0");
 
 		//Robot - Robot
-		ptr_robot_->setDof(74);
+		ptr_robot_->setDof(77);
 /*
 		//Create a MasterBoard object
 		MasterBoard *masterBoard = new MasterBoard();

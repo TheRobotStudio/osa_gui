@@ -68,29 +68,6 @@ SequencerGUI::SequencerGUI(QWidget *parent) :
 {
 	ui_.setupUi(this); //TODO learn and use the model/view methods for the postures and sequence table
 
-	//init motor data multi array
-	motor_data_array_.layout.dim.push_back(std_msgs::MultiArrayDimension());
-	motor_data_array_.layout.dim[0].size = 2;//NUMBER_SLAVE_BOARDS;
-	motor_data_array_.layout.dim[0].stride = 2; //NUMBER_SLAVE_BOARDS*NUMBER_MAX_EPOS2_PER_SLAVE;
-	motor_data_array_.layout.dim[0].label = "epos";
-/*
-	motor_data_array_.layout.dim.push_back(std_msgs::MultiArrayDimension());
-	motor_data_array_.layout.dim[1].size = NUMBER_MAX_EPOS2_PER_SLAVE;
-	motor_data_array_.layout.dim[1].stride = NUMBER_MAX_EPOS2_PER_SLAVE;
-	motor_data_array_.layout.dim[1].label = "motors";
-*/
-	motor_data_array_.layout.data_offset = 0;
-	motor_data_array_.motor_data.clear();
-	motor_data_array_.motor_data.resize(2); //NUMBER_SLAVE_BOARDS*NUMBER_MAX_EPOS2_PER_SLAVE);
-
-	for(int i=0; i<2; i++)
-	{
-		motor_data_array_.motor_data[i].node_id = 0;
-		motor_data_array_.motor_data[i].position = 0;
-		motor_data_array_.motor_data[i].current = 0;
-		motor_data_array_.motor_data[i].status = 0;
-	}
-
 	//Connect the node to ROS
 	QObject::connect(ptr_sequencer_node_, &rosnode::SequencerNode::motorDataReceived, this, &SequencerGUI::updateJSONMotorDataMultiArray);
 	//Link the Face Tracking node to the Sequencer node, so it transmit the head motor commands when it receives head coordinates
@@ -102,6 +79,29 @@ SequencerGUI::SequencerGUI(QWidget *parent) :
 	//Init ROS nodes
 	ptr_sequencer_node_->init();
 	ptr_face_tracking_node_->init();
+
+	//init motor data multi array
+	motor_data_array_.layout.dim.push_back(std_msgs::MultiArrayDimension());
+	motor_data_array_.layout.dim[0].size = ptr_sequencer_node_->getNumberEPOSBoards();//NUMBER_SLAVE_BOARDS;
+	motor_data_array_.layout.dim[0].stride = ptr_sequencer_node_->getNumberEPOSBoards(); //NUMBER_SLAVE_BOARDS*NUMBER_MAX_EPOS2_PER_SLAVE;
+	motor_data_array_.layout.dim[0].label = "epos";
+/*
+	motor_data_array_.layout.dim.push_back(std_msgs::MultiArrayDimension());
+	motor_data_array_.layout.dim[1].size = NUMBER_MAX_EPOS2_PER_SLAVE;
+	motor_data_array_.layout.dim[1].stride = NUMBER_MAX_EPOS2_PER_SLAVE;
+	motor_data_array_.layout.dim[1].label = "motors";
+*/
+	motor_data_array_.layout.data_offset = 0;
+	motor_data_array_.motor_data.clear();
+	motor_data_array_.motor_data.resize(ptr_sequencer_node_->getNumberEPOSBoards()); //NUMBER_SLAVE_BOARDS*NUMBER_MAX_EPOS2_PER_SLAVE);
+
+	for(int i=0; i<2; i++)
+	{
+		motor_data_array_.motor_data[i].node_id = 0;
+		motor_data_array_.motor_data[i].position = 0;
+		motor_data_array_.motor_data[i].current = 0;
+		motor_data_array_.motor_data[i].status = 0;
+	}
 
 	//Connect the Sequencer
 	//QObject::connect(m_pSequence, &sequencer::Sequence::motorDataReceived, this, &SequencerGUI::updateLpJSONMotorDataMultiArray);
@@ -166,7 +166,7 @@ void SequencerGUI::on_pb_record_clicked()
 		pJSONMotorDataMultiArray->addJSONMotorData(ptr_json_motor_data);
 	}
 
-	sequencer::Posture *ptr_posture = new sequencer::Posture();
+	sequencer::Posture *ptr_posture = new sequencer::Posture(ptr_sequencer_node_->getNumberEPOSBoards());
 	ptr_posture->setJSONMotorDataArray(pJSONMotorDataMultiArray);
 	addPosture(ptr_posture);
 }

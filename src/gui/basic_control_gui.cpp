@@ -57,24 +57,6 @@ BasicControlGUI::BasicControlGUI(QWidget *parent) :
 	//TODO this->showFullScreen();
 	ui_.setupUi(this); //Calling this incidentally connects all ui's triggers to on_...() callbacks in this class.
 
-	//create the motor command array, it will be used to set the motor command array of the ROS node
-	motor_cmd_array_.layout.dim.push_back(std_msgs::MultiArrayDimension());
-	motor_cmd_array_.layout.dim[0].size = 2; //NUMBER_SLAVE_BOARDS;
-	motor_cmd_array_.layout.dim[0].stride = 2;//NUMBER_SLAVE_BOARDS*NUMBER_MAX_EPOS2_PER_SLAVE;
-	motor_cmd_array_.layout.dim[0].label = "epos";
-/*
-	motor_cmd_array_.layout.dim.push_back(std_msgs::MultiArrayDimension());
-	motor_cmd_array_.layout.dim[1].size = NUMBER_MAX_EPOS2_PER_SLAVE;
-	motor_cmd_array_.layout.dim[1].stride = NUMBER_MAX_EPOS2_PER_SLAVE;
-	motor_cmd_array_.layout.dim[1].label = "motors";
-*/
-	motor_cmd_array_.layout.data_offset = 0;
-
-	motor_cmd_array_.motor_cmd.clear();
-	motor_cmd_array_.motor_cmd.resize(2); //NUMBER_SLAVE_BOARDS*NUMBER_MAX_EPOS2_PER_SLAVE);
-
-	resetMotorCmdMultiArray();
-
 	//register meta type for custom ROS messages
 	qRegisterMetaType<osa_msgs::MotorDataMultiArray>("osa_msgs::MotorDataMultiArray");
 	qRegisterMetaType<osa_msgs::MotorCmdMultiArray>("osa_msgs::MotorCmdMultiArray");
@@ -89,6 +71,24 @@ BasicControlGUI::BasicControlGUI(QWidget *parent) :
 
 	//Connect the node to ROS
 	basic_control_node_.init();
+
+	//create the motor command array, it will be used to set the motor command array of the ROS node
+	motor_cmd_array_.layout.dim.push_back(std_msgs::MultiArrayDimension());
+	motor_cmd_array_.layout.dim[0].size = basic_control_node_.getNumberEPOSBoards(); //NUMBER_SLAVE_BOARDS;
+	motor_cmd_array_.layout.dim[0].stride = basic_control_node_.getNumberEPOSBoards();//NUMBER_SLAVE_BOARDS*NUMBER_MAX_EPOS2_PER_SLAVE;
+	motor_cmd_array_.layout.dim[0].label = "epos";
+/*
+	motor_cmd_array_.layout.dim.push_back(std_msgs::MultiArrayDimension());
+	motor_cmd_array_.layout.dim[1].size = NUMBER_MAX_EPOS2_PER_SLAVE;
+	motor_cmd_array_.layout.dim[1].stride = NUMBER_MAX_EPOS2_PER_SLAVE;
+	motor_cmd_array_.layout.dim[1].label = "motors";
+*/
+	motor_cmd_array_.layout.data_offset = 0;
+
+	motor_cmd_array_.motor_cmd.clear();
+	motor_cmd_array_.motor_cmd.resize(basic_control_node_.getNumberEPOSBoards()); //NUMBER_SLAVE_BOARDS*NUMBER_MAX_EPOS2_PER_SLAVE);
+
+	resetMotorCmdMultiArray();
 
 	//QStringList modeList1({"ALL", "SB1", "SB2"});
 	//ui_.cb_slave_board->addItems(modeList1);
@@ -169,7 +169,7 @@ void BasicControlGUI::on_pb_sendRobotCurrentCmd_clicked()
 
 void BasicControlGUI::resetMotorCmdMultiArray()
 {
-	for(int i=0; i<2; i++)
+	for(int i=0; i<basic_control_node_.getNumberEPOSBoards(); i++)
 	{
 		motor_cmd_array_.motor_cmd[i].node_id = 0;
 		motor_cmd_array_.motor_cmd[i].command = SEND_DUMB_MESSAGE;
@@ -373,7 +373,7 @@ void BasicControlGUI::on_cb_mode_0_currentIndexChanged(int index)
 
 void BasicControlGUI::on_pb_send_0_clicked()
 {
-	for(int i=0; i<2; i++)
+	for(int i=0; i<basic_control_node_.getNumberEPOSBoards(); i++)
 	{
 		//TODO node id, not just array nb, as they can be anything now
 		motor_cmd_array_.motor_cmd[i].command = SET_CONTROLWORD;
@@ -385,7 +385,7 @@ void BasicControlGUI::on_pb_send_0_clicked()
 
 void BasicControlGUI::on_pb_stop_0_clicked()
 {
-	for(int i=0; i<2; i++)
+	for(int i=0; i<basic_control_node_.getNumberEPOSBoards(); i++)
 	{
 		motor_cmd_array_.motor_cmd[i].command = SET_CONTROLWORD;
 		motor_cmd_array_.motor_cmd[i].value = 819;

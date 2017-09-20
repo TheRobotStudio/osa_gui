@@ -45,8 +45,9 @@ using namespace common::osa_msgs_json;
 using namespace sequencer;
 using namespace Qt;
 
-Posture::Posture() :
+Posture::Posture(int number_epos_boards) :
 	SequenceElement(),
+	number_epos_boards_(number_epos_boards_),
 	ptr_json_motor_data_array_(NULL)
 	//m_msPauseAfter()
 {
@@ -78,8 +79,8 @@ void Posture::playElement(rosnode::SequencerNode* sequencerNode)
 
 	//create the commands multi array
 	motor_cmd_array.layout.dim.push_back(std_msgs::MultiArrayDimension());
-	motor_cmd_array.layout.dim[0].size = 2; //NUMBER_SLAVE_BOARDS;
-	motor_cmd_array.layout.dim[0].stride = 2; //NUMBER_SLAVE_BOARDS*NUMBER_MAX_EPOS2_PER_SLAVE;
+	motor_cmd_array.layout.dim[0].size = number_epos_boards_; //NUMBER_SLAVE_BOARDS;
+	motor_cmd_array.layout.dim[0].stride = number_epos_boards_; //NUMBER_SLAVE_BOARDS*NUMBER_MAX_EPOS2_PER_SLAVE;
 	motor_cmd_array.layout.dim[0].label = "epos";
 /*
 	motor_cmd_array.layout.dim.push_back(std_msgs::MultiArrayDimension());
@@ -90,9 +91,9 @@ void Posture::playElement(rosnode::SequencerNode* sequencerNode)
 	motor_cmd_array.layout.data_offset = 0;
 
 	motor_cmd_array.motor_cmd.clear();
-	motor_cmd_array.motor_cmd.resize(2); // NUMBER_SLAVE_BOARDS*NUMBER_MAX_EPOS2_PER_SLAVE);
+	motor_cmd_array.motor_cmd.resize(number_epos_boards_); // NUMBER_SLAVE_BOARDS*NUMBER_MAX_EPOS2_PER_SLAVE);
 
-	for(int i=0; i<2; i++)
+	for(int i=0; i<number_epos_boards_; i++)
 	{
 		//motor_cmd_array.motor_cmd[i*NUMBER_MAX_EPOS2_PER_SLAVE + j].slaveBoardID = i + 1;
 		motor_cmd_array.motor_cmd[i].node_id = ptr_json_motor_data_array_->getJSONMotorDataList().at(i)->getNodeID(); //j + 1; //i*NUMBER_MAX_EPOS2_PER_SLAVE + j + 1;
