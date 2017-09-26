@@ -28,7 +28,7 @@
  * @file sequencer_gui.cpp
  * @author Cyril Jourdan
  * @date Mar 21, 2017
- * @version 0.0.1
+ * @version 0.1.0
  * @brief Implementation file for class SequencerGUI.
  *
  * Contact: cyril.jourdan@therobotstudio.com

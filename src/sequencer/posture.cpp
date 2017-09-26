@@ -25,10 +25,10 @@
  */
 
 /**
- * @file Posture.cpp
+ * @file posture.cpp
  * @author Cyril Jourdan
  * @date Dec 12, 2016
- * @version 0.0.1
+ * @version 0.1.0
  * @brief Implementation file for abstract class Posture
  *
  * Contact: cyril.jourdan@therobotstudio.com

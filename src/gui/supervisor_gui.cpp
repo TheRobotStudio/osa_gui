@@ -28,7 +28,7 @@
  * @file supervisor_gui.cpp
  * @author Cyril Jourdan
  * @date Feb 20, 2017
- * @version 0.0.1
+ * @version 0.1.0
  * @brief Implementation file for class SupervisorGUI
  *
  * Contact: cyril.jourdan@therobotstudio.com

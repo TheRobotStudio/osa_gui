@@ -28,7 +28,7 @@
  * @file main_window.cpp
  * @author Cyril Jourdan
  * @date Mar 14, 2017
- * @version OSA 2.0.0
+ * @version 0.1.0
  * @brief Implementation file for class MainWindow.
  *
  * Contact: cyril.jourdan@therobotstudio.com

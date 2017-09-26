@@ -28,7 +28,7 @@
  * @file PlotGUI.cpp
  * @author Cyril Jourdan
  * @date Mar 17, 2017
- * @version OSA 2.0.0
+ * @version 0.1.0
  * @brief Implementation file for class PlotGUI.
  * 		  Adapted from QCustomPlot interaction example.
  *

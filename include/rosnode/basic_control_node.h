@@ -75,7 +75,7 @@ public:
 	void motorDataArrayCallback(const osa_msgs::MotorDataMultiArrayConstPtr &data);
 
 	//setters
-	int setEnablePublish(bool state);
+	int setEnablePublish(bool state) noexcept;
 
 	//getters
 	std::string getRobotName() const { return robot_name_; };

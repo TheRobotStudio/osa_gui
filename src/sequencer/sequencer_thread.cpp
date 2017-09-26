@@ -25,11 +25,11 @@
  */
 
 /**
- * @file Sequence.cpp
+ * @file sequencer_thread.cpp
  * @author Cyril Jourdan
  * @date Dec 12, 2016
- * @version 0.0.1
- * @brief Implementation file for abstract class Sequence
+ * @version 0.1.0
+ * @brief Implementation file for abstract class SequencerThread
  *
  * Contact: cyril.jourdan@therobotstudio.com
  * Created on : Dec 12, 2016

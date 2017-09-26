@@ -11,6 +11,8 @@ find_package(OpenGL)
 SET(CMAKE_AUTOMOC ON)
 SET(CMAKE_INCLUDE_CURRENT_DIR ON)
 
+add_compile_options(-std=c++11)
+
 catkin_package(
   INCLUDE_DIRS include/common include/gui include/gui/qcustomplot include/rosnode
   CATKIN_DEPENDS roscpp osa_msgs osa_control

@@ -28,7 +28,7 @@
  * @file basic_control_node.cpp
  * @author Cyril Jourdan
  * @date Mar 14, 2017
- * @version OSA 0.1.0
+ * @version 0.1.0
  * @brief Implementation file for the ROS class BasicControlNode.
  *
  * Contact: cyril.jourdan@therobotstudio.com

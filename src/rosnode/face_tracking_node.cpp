@@ -28,7 +28,7 @@
  * @file face_tracking_node.cpp
  * @author Cyril Jourdan
  * @date Apr 26, 2017
- * @version OSA 2.0.0
+ * @version 0.1.0
  * @brief Implementation file for the ROS class FaceTrackingNode.
  *
  * Contact: cyril.jourdan@therobotstudio.com

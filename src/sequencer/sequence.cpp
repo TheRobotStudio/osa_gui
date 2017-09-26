@@ -25,69 +25,81 @@
  */
 
 /**
- * @file Pause.cpp
+ * @file sequence.cpp
  * @author Cyril Jourdan
  * @date Dec 12, 2016
- * @version 0.0.1
- * @brief Implementation file for class Pause
+ * @version 0.1.0
+ * @brief Implementation file for abstract class Sequence
  *
  * Contact: cyril.jourdan@therobotstudio.com
  * Created on : Dec 12, 2016
  */
 
-#include <pause.h>
-#include <ros/ros.h>
+#include <sequence.h>
 #include <QJsonArray>
-#include "robot_defines.h"
 
 using namespace std;
 using namespace osa_gui;
 using namespace sequencer;
 using namespace Qt;
 
-//constructors
-Pause::Pause() :
-	SequenceElement(),
-	ms_duration_(0)
+Sequence::Sequence() :
+		sequence_element_list_(QList<SequenceElement*>())
 {
-
 }
 
-//destructor
-Pause::~Pause()
+Sequence::~Sequence()
 {
 
 }
 
 //setters
-int Pause::setMsDuration(uint32_t ms_duration)
+int Sequence::addSequenceElement(SequenceElement* ptr_sequence_element)
 {
-	ms_duration_ = ms_duration;
+	//check the argument
+	if(ptr_sequence_element != 0)
+	{
+		sequence_element_list_.append(ptr_sequence_element);
 
-	return 0;
+		return 0;
+	}
+	else
+		throw invalid_argument("Argument ptr_sequence_element is NULL.");
+		//return -1; //TODO remplace return int with throw
 }
 
-void Pause::playElement(rosnode::SequencerNode* sequencerNode)
+void Sequence::playSequence(rosnode::SequencerNode* sequencer_node)
 {
-	ROS_INFO("Pause::playElement : Apply a %d ms pause.", ms_duration_);
-	double sleep = (double)ms_duration_;
-	sleep /= 1000;
-	ros::Duration(sleep).sleep();
-
-	//sequencerNode->setPause(ms_duration_);
-	//))m_pause.setMsDuration(ms_duration_);
+	foreach(SequenceElement* ptr_sequence_element, sequence_element_list_)
+	{
+		ptr_sequence_element->playElement(sequencer_node);
+	}
 }
 
-void Pause::read(const QJsonObject &json)
+void Sequence::read(const QJsonObject &json)
 {
-	SequenceElement::read(json);
+	//SequenceElement pointer QList
+	sequence_element_list_.clear();
+	QJsonArray sequenceElementArray = json["ptr_sequence_element"].toArray();
 
-	ms_duration_ = (uint32_t)json["ms_duration"].toDouble();
+	for(int i = 0; i<sequenceElementArray.size(); ++i)
+	{
+		QJsonObject ptr_sequence_elementObject = sequenceElementArray[i].toObject();
+		SequenceElement* ptr_sequence_element;
+		ptr_sequence_element->read(ptr_sequence_elementObject);
+		sequence_element_list_.append(ptr_sequence_element);
+	}
 }
 
-void Pause::write(QJsonObject &json) const
+void Sequence::write(QJsonObject &json) const
 {
-	SequenceElement::write(json);
-
-	json["ms_duration"] = (double)ms_duration_;
+	//SequenceElement pointer QList
+	QJsonArray sequenceElementArray;
+	foreach(const SequenceElement* ptr_sequence_element, sequence_element_list_)
+	{
+		QJsonObject ptr_sequence_elementObject;
+		ptr_sequence_element->write(ptr_sequence_elementObject);
+		sequenceElementArray.append(ptr_sequence_elementObject);
+	}
+	json["ptr_sequence_element"] = sequenceElementArray;
 }
