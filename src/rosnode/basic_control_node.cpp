@@ -84,7 +84,7 @@ bool BasicControlNode::init()
 {
 	int init_argc = 0;
 	char** init_argv = 0;
-	ros::init(init_argc, init_argv, "osa_gui_robotBasicControlNode");
+	ros::init(init_argc, init_argv, "osa_gui_robot_basic_control_node");
 
 	if(!ros::master::check())
 	{
@@ -287,8 +287,9 @@ bool BasicControlNode::init()
 
 		ROS_INFO("Parameters loaded successfully!\n");
 	}
-	catch(int exception)
+	catch(ros::InvalidNameException const &e)
 	{
+		ROS_ERROR(e.what());
 		ROS_ERROR("Parameters didn't load correctly!");
 		ROS_ERROR("Please modify your YAML config file and try again.");
 
@@ -391,7 +392,7 @@ void BasicControlNode::motorDataArrayCallback(const osa_msgs::MotorDataMultiArra
 	Q_EMIT motorDataReceived(motor_data_array_);
 }
 
-int BasicControlNode::setEnablePublish(bool state)
+int BasicControlNode::setEnablePublish(bool state) noexcept
 {
 	enable_publish_ = state;
 
