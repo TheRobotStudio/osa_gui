@@ -95,7 +95,11 @@ SequencerGUI::SequencerGUI(QWidget *parent) :
 	motor_data_array_.motor_data.clear();
 	motor_data_array_.motor_data.resize(ptr_sequencer_node_->getNumberEPOSBoards()); //NUMBER_SLAVE_BOARDS*NUMBER_MAX_EPOS2_PER_SLAVE);
 
-	for(int i=0; i<2; i++)
+	int num_nodes = ptr_sequencer_node_->getNumberEPOSBoards();
+
+//	ROS_INFO("num_nodes=%d", num_nodes);
+
+	for(int i=0; i<num_nodes; i++)
 	{
 		motor_data_array_.motor_data[i].node_id = 0;
 		motor_data_array_.motor_data[i].position = 0;
@@ -166,7 +170,11 @@ void SequencerGUI::on_pb_record_clicked()
 		pJSONMotorDataMultiArray->addJSONMotorData(ptr_json_motor_data);
 	}
 
+//	ROS_INFO("record clicked : nb nodes = %d", ptr_sequencer_node_->getNumberEPOSBoards());
+//	int nb_nodes = ptr_sequencer_node_->getNumberEPOSBoards();
+
 	sequencer::Posture *ptr_posture = new sequencer::Posture(ptr_sequencer_node_->getNumberEPOSBoards());
+	//sequencer::Posture *ptr_posture = new sequencer::Posture(nb_nodes);
 	ptr_posture->setJSONMotorDataArray(pJSONMotorDataMultiArray);
 	addPosture(ptr_posture);
 }

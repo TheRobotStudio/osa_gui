@@ -47,10 +47,11 @@ using namespace Qt;
 
 Posture::Posture(int number_epos_boards) :
 	SequenceElement(),
-	number_epos_boards_(number_epos_boards_),
+	number_epos_boards_(number_epos_boards),
 	ptr_json_motor_data_array_(NULL)
 	//m_msPauseAfter()
 {
+	ROS_INFO("Constructor, number_epos_boards_=%d", number_epos_boards_);
 }
 
 Posture::~Posture()
@@ -82,19 +83,20 @@ void Posture::playElement(rosnode::SequencerNode* sequencerNode)
 	motor_cmd_array.layout.dim[0].size = number_epos_boards_; //NUMBER_SLAVE_BOARDS;
 	motor_cmd_array.layout.dim[0].stride = number_epos_boards_; //NUMBER_SLAVE_BOARDS*NUMBER_MAX_EPOS2_PER_SLAVE;
 	motor_cmd_array.layout.dim[0].label = "epos";
-/*
-	motor_cmd_array.layout.dim.push_back(std_msgs::MultiArrayDimension());
-	motor_cmd_array.layout.dim[1].size = NUMBER_MAX_EPOS2_PER_SLAVE;
-	motor_cmd_array.layout.dim[1].stride = NUMBER_MAX_EPOS2_PER_SLAVE;
-	motor_cmd_array.layout.dim[1].label = "motors";
-*/
+
 	motor_cmd_array.layout.data_offset = 0;
+
+	ROS_INFO("before for 2, number_epos_boards_=%d", number_epos_boards_);
 
 	motor_cmd_array.motor_cmd.clear();
 	motor_cmd_array.motor_cmd.resize(number_epos_boards_); // NUMBER_SLAVE_BOARDS*NUMBER_MAX_EPOS2_PER_SLAVE);
 
+
+	//ROS_INFO("before for 3");
+
 	for(int i=0; i<number_epos_boards_; i++)
-	{
+	{	
+		ROS_INFO("i=%d", i);
 		//motor_cmd_array.motor_cmd[i*NUMBER_MAX_EPOS2_PER_SLAVE + j].slaveBoardID = i + 1;
 		motor_cmd_array.motor_cmd[i].node_id = ptr_json_motor_data_array_->getJSONMotorDataList().at(i)->getNodeID(); //j + 1; //i*NUMBER_MAX_EPOS2_PER_SLAVE + j + 1;
 		motor_cmd_array.motor_cmd[i].command = SET_TARGET_POSITION;

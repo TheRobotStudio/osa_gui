@@ -82,6 +82,7 @@ void SequencerThread::run() //TODO check the use of exec()
 		{
 			if(play_posture_)
 			{
+				//ROS_INFO("play posture in thread");	
 				ptr_posture_->playElement(ptr_sequencer_node_);
 				//posture played
 				play_posture_ = false;

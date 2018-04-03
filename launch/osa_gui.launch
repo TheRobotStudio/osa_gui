@@ -1,0 +1,4 @@
+<launch>
+	<node name="osa_gui_node" pkg="osa_gui" type="osa_gui" respawn="false" launch-prefix="xterm -e gdb --args"/>
+</launch>
+
