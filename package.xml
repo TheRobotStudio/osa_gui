@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
 <package>
   <name>osa_gui</name>
-  <version>0.1.0</version>
+  <version>0.1.1</version>
   <description>Package for the GUI</description>
   <license>Simplified BSD</license>
   
-  <maintainer email="cyril.jourdan@therobotstudio.com">Cyril Jourdan</maintainer>
-  <author email="cyril.jourdan@therobotstudio.com">Cyril Jourdan</author>
+  <maintainer email="contact@therobotstudio.com">Rob Knight</maintainer>
+  <author email="cyril.jourdan.86@gmail.com">Cyril Jourdan</author>
   
   <url type="GitHub repository">https://github.com/TheRobotStudio</url>
   <url type="OSA website">http://opensourceandroid.org/</url>
